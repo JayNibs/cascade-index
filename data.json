@@ -35,7 +35,15 @@
     55
    ],
    "observed": 6.5,
-   "notes": {}
+   "notes": {
+    "1": "Anthropic disclosed four evaluation-sandbox incidents (Sept 9) and DeepSeek released V4.1 Flash (Sept 10); neither is a frontier release or benchmark result bearing on reliability at real work. No change; carried forward.",
+    "2": "METR's time-horizon page still shows May 8 as its last update; no lab published a long-horizon measurement this week. No change; carried forward.",
+    "3": "OpenAI shipped a Data agent for ChatGPT Work (Sept 10) and Salesforce made cross-session agent memory generally available (Sept 11); supply-side launches with no deployment figures, and no survey moved the enterprise connector-deployment share. No change; carried forward.",
+    "4": "Howden Re said most commercial policies lack AI definitions and generative-AI exclusions are expected at January 2027 renewals (Sept 10); a Senate subcommittee opened an investigation into OpenAI's Hugging Face breach. No new insurance product, ruling or guidance. No change; carried forward.",
+    "5": "Oracle's Q1 FY2027 10-Q (Sept 11) raised its restructuring plan by $700M to about $2.8B, framed as funding data-center spend rather than AI replacing work; shares fell 1.8%. No new company put a job number on AI. No change; carried forward. Sector with most disclosures: technology.",
+    "6": "OpenAI posted that gpt-5.4-cyber shuts down Oct 1 on about 20 days' notice, against its stated six-month minimum; a gated specialty model, single source, no general policy change. No change; carried forward.",
+    "7": "California SB 951 went to the Governor Sept 9 with a Sept 30 deadline; the enrolled text keeps the 60-day WARN period and requires notices to list job functions being automated. No company attributed cuts to AI this week. No change; carried forward."
+   }
   }
  ]
 }
