@@ -22,6 +22,20 @@
     "6": "Fable 5.1 shipped Sept 1–3 with list price unchanged and cache reads cut 75 percent; OpenAI, Anthropic and xAI had a simultaneous outage Sept 3 tied to upstream compute; committed support windows remain 12 to 18 months at Microsoft and AWS and notice-only at OpenAI and Anthropic. Baseline set at 68.",
     "7": "Challenger's August report (Sept 3) put AI at 6.5 percent of cuts, fourth among reasons after five months in first; California's SB 951 90-day AI-layoff notice bill cleared the Legislature Aug 31 and awaits the Governor; no new large-company AI attributions this week. Baseline set at 55."
    }
+  },
+  {
+   "date": "2026-09-15",
+   "barriers": [
+    50,
+    45,
+    62,
+    65,
+    45,
+    68,
+    55
+   ],
+   "observed": 6.5,
+   "notes": {}
   }
  ]
 }
