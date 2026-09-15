@@ -1,0 +1,27 @@
+{
+ "_readme": "Displacement Cascade Index weekly data. Each week: date (YYYY-MM-DD), barriers (seven scores 0-100 in vector order 1-7; 100 = intact, 0 = gone), observed (displacement %), notes (optional, keyed by vector number 1-7). Weeks are in chronological order, oldest first.",
+ "weeks": [
+  {
+   "date": "2026-09-08",
+   "barriers": [
+    50,
+    45,
+    62,
+    65,
+    45,
+    68,
+    55
+   ],
+   "observed": 6.5,
+   "notes": {
+    "1": "Anthropic released Claude Fable 5.1 (Sept 1) and OpenAI released GPT-6 Astra (Sept 3–4); both post higher agentic benchmark scores, and both system cards still report frequent unverified claims, so every output still needs review. Baseline set at 50.",
+    "2": "No new METR time-horizon measurement since May 8; best public-model 50% horizon remains Claude Opus 4.6 at about 12 hours, and this week's releases are unmeasured. Baseline set at 45.",
+    "3": "McKinsey (Aug 25) puts agent scaling at 40 percent of large firms and Gartner (Apr 15) puts overall agent deployment at 17 percent; MCP enterprise authorization went stable in July; persistent memory remains in beta. Baseline set at 62.",
+    "4": "Specialty AI-agent liability cover is sold by at least four carriers with small limits and autonomous-action exclusions; the Ninth Circuit's Amazon v. Perplexity ruling (Aug 4) placed CFAA responsibility on the user; EU and Colorado high-risk obligations remain deferred to 2027–2028. Baseline set at 65.",
+    "5": "Oracle's 10-K, Block, Amazon and four large banks have disclosed AI-linked headcount cuts with numbers; Block's shares rose on its announcement while Oracle's fell; analysts screen for AI labor exposure but do not model headcount effects. Baseline set at 45. Sector with most disclosures: technology.",
+    "6": "Fable 5.1 shipped Sept 1–3 with list price unchanged and cache reads cut 75 percent; OpenAI, Anthropic and xAI had a simultaneous outage Sept 3 tied to upstream compute; committed support windows remain 12 to 18 months at Microsoft and AWS and notice-only at OpenAI and Anthropic. Baseline set at 68.",
+    "7": "Challenger's August report (Sept 3) put AI at 6.5 percent of cuts, fourth among reasons after five months in first; California's SB 951 90-day AI-layoff notice bill cleared the Legislature Aug 31 and awaits the Governor; no new large-company AI attributions this week. Baseline set at 55."
+   }
+  }
+ ]
+}

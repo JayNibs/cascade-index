@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Displacement Cascade Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wall:#E6E3DB; --ink:#22262B; --ink-2:#5B6169; --rule:#CFCBC0;
+    --panel:#1E242C; --panel-2:#262D36; --readout:#EDEAE2; --readout-2:#96A0AB; --panel-rule:#3A434E;
+    --water:#4A8FD6; --water-2:#2F6FB5; --steel:#9AA3AD; --steel-2:#6B747E;
+    --green:#3FA35B; --amber:#E0A126; --red:#D9483B;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--wall)}
+  body{margin:0;font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--ink);font-size:17px;line-height:1.55}
+  .wrap{max-width:1040px;margin:0 auto;padding:32px 20px 80px}
+  header h1{font-size:30px;font-weight:500;margin:0 0 6px;letter-spacing:-.01em}
+  header .sub{font-size:16px;color:var(--ink-2);margin:0 0 22px}
+  .lede{max-width:66ch;margin:0 0 28px}
+  .lede p{margin:0 0 12px}
+  .note{font-size:14px;color:var(--ink-2);border-left:3px solid var(--rule);padding:6px 12px;margin:0 0 24px;max-width:66ch}
+
+  .panel{background:var(--panel);color:var(--readout);border-radius:6px;padding:18px 18px 12px;border:1px solid #121519}
+  .readouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding-bottom:14px;border-bottom:1px solid var(--panel-rule)}
+  .readout .lab{font-size:13px;color:var(--readout-2);margin:0 0 2px}
+  .readout .val{font-family:"IBM Plex Mono",monospace;font-size:30px;font-weight:500;line-height:1.1;margin:0}
+  .readout .val small{font-size:14px;color:var(--readout-2);font-weight:400}
+  .readout .val.stage{font-family:"IBM Plex Sans",sans-serif;font-size:22px}
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:6px -6px 0;padding:0 6px}
+  svg.scene{display:block;min-width:820px;width:100%;height:auto}
+  svg.scene text{font-family:"IBM Plex Sans",sans-serif;fill:var(--readout-2);font-size:13px}
+  svg.scene text.num{font-family:"IBM Plex Mono",monospace;fill:var(--readout);font-size:16px;font-weight:500}
+  svg.scene text.strong{fill:var(--readout);font-size:15px;font-weight:500}
+  svg.scene text.stage{font-size:12px}
+  @media (prefers-reduced-motion:no-preference){
+    svg.scene .bar,svg.scene .water{transition:y .6s ease,height .6s ease,fill .6s ease}
+    .light{transition:background .4s}
+  }
+
+  .controls{display:flex;align-items:center;gap:14px;padding:14px 0 6px;flex-wrap:wrap}
+  .controls button{font:inherit;font-size:14px;background:var(--panel-2);color:var(--readout);border:1px solid var(--panel-rule);border-radius:4px;padding:7px 14px;cursor:pointer;min-width:74px}
+  .controls button:hover{background:#2E3640}
+  .controls button:focus-visible,.controls input:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  .controls input[type=range]{flex:1;min-width:160px;accent-color:var(--amber)}
+  .controls .week{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--readout);min-width:150px;text-align:right}
+  .hint{font-size:13px;color:var(--readout-2);margin:0;padding-bottom:2px}
+
+  .rows{margin:26px 0 0;border-top:1px solid var(--rule)}
+  .row{display:grid;grid-template-columns:22px 34px 1fr 60px 64px;gap:0 12px;align-items:center;padding:11px 4px;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit}
+  .row:hover{background:#DEDBD2}
+  .row .light{width:12px;height:12px;border-radius:50%;background:var(--steel)}
+  .row .n{font-family:"IBM Plex Mono",monospace;color:var(--ink-2);font-size:14px}
+  .row .name{font-size:16px}
+  .row .name small{display:block;font-size:13px;color:var(--ink-2)}
+  .row .score{font-family:"IBM Plex Mono",monospace;font-size:20px;font-weight:500;text-align:right}
+  .row .delta{font-family:"IBM Plex Mono",monospace;font-size:14px;text-align:right;color:var(--ink-2)}
+  .row .delta.down{color:var(--red)}
+  .legend{display:flex;gap:18px;font-size:13px;color:var(--ink-2);margin:10px 4px 0}
+  .legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}
+  .legend .g::before{background:var(--green)} .legend .a::before{background:var(--amber)} .legend .r::before{background:var(--red)}
+
+  h2{font-size:22px;font-weight:500;margin:56px 0 8px}
+  .channel{border-top:1px solid var(--rule);padding:28px 0 8px;scroll-margin-top:16px}
+  .channel h3{font-size:20px;font-weight:500;margin:0 0 4px}
+  .channel .def{max-width:66ch;margin:0 0 6px}
+  .channel .why{max-width:66ch;color:var(--ink-2);font-size:15px;margin:0 0 18px}
+  .log{margin:0;padding:0;list-style:none;max-width:72ch}
+  .log li{display:grid;grid-template-columns:110px 44px 52px 1fr;gap:0 12px;padding:8px 0;border-top:1px dashed var(--rule);font-size:15px;align-items:baseline}
+  .log li .d{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-2)}
+  .log li .s{font-family:"IBM Plex Mono",monospace;font-weight:500}
+  .log li .c{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-2)}
+  .log li .c.down{color:var(--red)}
+  .log li .m{color:var(--ink)}
+  .log li .m.quiet{color:var(--ink-2)}
+  footer{margin-top:60px;font-size:14px;color:var(--ink-2);max-width:66ch}
+  @media (max-width:640px){
+    body{font-size:16px}
+    .readouts{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .readout .val{font-size:26px}
+    .row{grid-template-columns:18px 30px 1fr 50px 54px}
+    .log li{grid-template-columns:96px 40px 46px 1fr;font-size:14px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Displacement Cascade Index</h1>
+  <p class="sub">A weekly reading of how little now stands between AI capability and large-scale job loss.</p>
+</header>
+
+<div class="lede">
+  <p>This is not about machines taking over. It is about paychecks. When enough white-collar paychecks stop, everyone those paychecks were paying stops getting paid too: the mortgage, the daycare, the dentist, the contractor. That second round is what turns a bad year for one profession into an economy-wide problem.</p>
+  <p>The panel below tracks the seven things currently standing between us and that. Three are gates, technical limits on what AI can reliably do. Four are levees, the legal, economic and social walls that slow a company from acting on it. Every barrier is scored from 100, fully intact, to 0, gone. Water can only reach the economy as far as the tallest remaining wall allows, so the index is simply 100 minus the tallest barrier.</p>
+</div>
+
+<section class="panel" aria-label="Control panel">
+  <div class="readouts">
+    <div class="readout"><p class="lab">Index</p><p class="val" id="rComposite">—<small> / 100</small></p></div>
+    <div class="readout"><p class="lab">Stage</p><p class="val stage" id="rStage">—</p></div>
+    <div class="readout"><p class="lab">Tallest barrier</p><p class="val stage" id="rBottleneck">—</p></div>
+    <div class="readout"><p class="lab">Observed displacement</p><p class="val" id="rObserved">—<small>%</small></p></div>
+  </div>
+
+  <div class="scroller">
+    <svg class="scene" viewBox="0 0 1000 300" role="img" aria-labelledby="sceneTitle sceneDesc">
+      <title id="sceneTitle">Reservoir, three gates and four levees in series, water flowing toward the economy</title>
+      <desc id="sceneDesc">Barrier heights and water levels update with the selected week.</desc>
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#EDEAE2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+      </defs>
+      <g id="scene"></g>
+    </svg>
+  </div>
+
+  <div class="controls">
+    <button id="play" type="button" aria-label="Play through weeks">Play</button>
+    <input id="slider" type="range" min="0" max="0" value="0" step="1" aria-label="Week">
+    <span class="week" id="weekLabel">—</span>
+  </div>
+  <p class="hint">Drag to scroll back through time. Arrow keys step one week.</p>
+</section>
+
+<div class="rows" id="rows"></div>
+<div class="legend"><span class="g">holding (60 and above)</span><span class="a">moving (30 to 59)</span><span class="r">nearly gone (below 30)</span></div>
+
+<h2>The seven barriers</h2>
+<div id="channels"></div>
+
+<footer>Index = 100 minus the tallest remaining barrier. Stages: dry below 20, rising 20 to 39, watch 40 to 59, warning 60 to 79, breach 80 and above. Observed displacement is a lagging measurement of what has actually arrived; the index is a leading reading of what the conditions permit.</footer>
+
+</div>
+
+<script>
+const VECTORS = [
+  {id:1,kind:"gate",short:"Reliability",name:"Capability reliability",
+   def:"How dependable AI is at real work, judged by its worst days rather than its best. A barrier at 100 means failures are frequent and unpredictable; at 0, failures are rare and bounded.",
+   why:"A person at 85% accuracy is manageable. A system at 95% whose remaining errors are strange and unforeseeable is not, because no one can design around it. This wall drops when error modes become predictable, not when averages rise."},
+  {id:2,kind:"gate",short:"Autonomy",name:"Autonomy span",
+   def:"How long AI can work unsupervised before a human has to step in. A barrier at 100 means minutes; at 0, weeks.",
+   why:"Replacing a task takes minutes of autonomy. Replacing a role takes days of it, with self-correction along the way. This is the frontier most watched by the labs and the one that moves in steps, not slopes."},
+  {id:3,kind:"gate",short:"Context",name:"Context integration",
+   def:"How much of the undocumented knowledge a job runs on is reachable by the AI: the customer history, the email trail, the rule nobody wrote down.",
+   why:"Most of what makes an employee useful is not in any manual. This wall is a plumbing problem, integrations and memory, not an intelligence problem, and plumbing gets built."},
+  {id:4,kind:"levee",short:"Accountability",name:"Accountability",
+   def:"Whether someone insurable and answerable can own what an AI does. A barrier at 100 means no one will sign; at 0, the liability question is settled.",
+   why:"Companies do not act until someone can be blamed. This wall drops when insurers write policies, courts assign responsibility, or org charts formally put one person in charge of many agents."},
+  {id:5,kind:"levee",short:"Proof",name:"Legible proof",
+   def:"Public, finance-readable evidence that replacement worked inside a given industry: a disclosed cut, a margin change, a cost measured over a year.",
+   why:"Benchmarks do not move budgets. A competitor's earnings call does. This is usually the tallest wall, and the one whose collapse starts the cascade in a sector."},
+  {id:6,kind:"levee",short:"Vendor trust",name:"Vendor trust",
+   def:"Confidence that the platform a company rebuilds around will still exist, behave the same, and be priced the same in three years.",
+   why:"No one rebuilds a department on something that might be discontinued in eighteen months. This wall drops as contracts lengthen and deprecation slows."},
+  {id:7,kind:"levee",short:"Social",name:"Social permission",
+   def:"Whether a company can cut people for AI without becoming the headline.",
+   why:"This is the weakest wall, and the one closest to the economy. It holds only until two or three large names go first and absorb the news cycle."}
+];
+
+const STAGES=[[80,"Breach"],[60,"Warning"],[40,"Watch"],[20,"Rising"],[0,"Dry"]];
+const stageOf=c=>STAGES.find(s=>c>=s[0])[1];
+const lightOf=b=>b>=60?"var(--green)":b>=30?"var(--amber)":"var(--red)";
+
+// Weekly data lives in data.json (same folder). Barrier scores: 100 = intact, 0 = gone.
+let WEEKS=[];
+async function loadWeeks(){
+  const r=await fetch("data.json?v="+Date.now(),{cache:"no-store"});
+  if(!r.ok) throw new Error("data.json "+r.status);
+  const j=await r.json();
+  return j.weeks.map(x=>({w:x.date,b:x.barriers.map(Number),o:Number(x.observed),n:x.notes||{}}));
+}
+
+// Geometry
+const FLOOR=240, TOP=100, UNIT=(FLOOR-TOP)/100;
+const RES={x:40,w:140};
+const BX=[210,300,390,490,580,670,760], BW=14;
+const LAST={x:774,w:120}; const ARROW={x1:900,x2:950,y:FLOOR-14};
+
+const svgNS="http://www.w3.org/2000/svg";
+const el=(t,a={})=>{const e=document.createElementNS(svgNS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+const txt=(x,y,s,cls,anchor)=>{const t=el("text",{x,y,"text-anchor":anchor||"middle"});if(cls)t.setAttribute("class",cls);t.textContent=s;return t};
+
+const scene=document.getElementById("scene");
+const parts={waters:[],bars:[],lights:[],nums:[]};
+
+function buildScene(){
+  // Reservoir (always full)
+  scene.appendChild(el("rect",{x:RES.x,y:TOP-20,width:RES.w,height:FLOOR-(TOP-20),fill:"var(--water-2)"}));
+  scene.appendChild(el("rect",{x:RES.x,y:TOP-20,width:RES.w,height:FLOOR-(TOP-20),fill:"none",stroke:"var(--steel-2)","stroke-width":1}));
+  scene.appendChild(txt(RES.x+RES.w/2,TOP-30,"capability pressure (held at 100)",""));
+  // Water segments
+  const segs=[];
+  segs.push([RES.x+RES.w, BX[0]]);
+  for(let i=0;i<BX.length-1;i++) segs.push([BX[i]+BW, BX[i+1]]);
+  segs.push([BX[6]+BW, LAST.x+LAST.w]);
+  segs.forEach(([a,b])=>{const r=el("rect",{x:a,y:FLOOR,width:b-a,height:0,fill:"var(--water)"});r.setAttribute("class","water");scene.appendChild(r);parts.waters.push(r)});
+  // Floor and ceiling
+  scene.appendChild(el("line",{x1:RES.x,y1:FLOOR,x2:LAST.x+LAST.w,y2:FLOOR,stroke:"var(--steel)","stroke-width":1.5}));
+  scene.appendChild(el("line",{x1:BX[0],y1:TOP,x2:LAST.x+LAST.w,y2:TOP,stroke:"var(--panel-rule)","stroke-width":1,"stroke-dasharray":"3 4"}));
+  // Barriers, lights, numerals, labels
+  VECTORS.forEach((v,i)=>{
+    const r=el("rect",{x:BX[i],y:FLOOR,width:BW,height:0,fill:"var(--steel)",stroke:"var(--steel-2)","stroke-width":1});
+    r.setAttribute("class","bar");scene.appendChild(r);parts.bars.push(r);
+    const c=el("circle",{cx:BX[i]+BW/2,cy:52,r:7,fill:"var(--steel)"});scene.appendChild(c);parts.lights.push(c);
+    const n=txt(BX[i]+BW/2,80,"—","num");scene.appendChild(n);parts.nums.push(n);
+    scene.appendChild(txt(BX[i]+BW/2,262,v.id+" "+v.short,""));
+  });
+  scene.appendChild(txt((BX[0]+BX[2]+BW)/2,284,"gates: what AI can reliably do",""));
+  scene.appendChild(txt((BX[3]+BX[6]+BW)/2,284,"levees: what stops a company acting on it",""));
+  // Stage lines on final segment
+  [[40,"watch"],[60,"warning"],[80,"breach"]].forEach(([lvl,name])=>{
+    const y=FLOOR-lvl*UNIT;
+    scene.appendChild(el("line",{x1:LAST.x,y1:y,x2:LAST.x+LAST.w,y2:y,stroke:"var(--readout-2)","stroke-width":1,"stroke-dasharray":"2 3"}));
+    scene.appendChild(txt(LAST.x+LAST.w+8,y+4,name+" "+lvl,"stage","start"));
+  });
+  // Economy arrow
+  scene.appendChild(el("line",{x1:ARROW.x1,y1:ARROW.y,x2:ARROW.x2,y2:ARROW.y,stroke:"var(--readout)","stroke-width":2,"marker-end":"url(#arrow)"}));
+  scene.appendChild(txt((ARROW.x1+ARROW.x2)/2,ARROW.y-16,"Economy","strong"));
+  // Water level readout marker
+  parts.levelText=txt(LAST.x+LAST.w/2,0,"","num");scene.appendChild(parts.levelText);
+}
+
+function render(i){
+  const wk=WEEKS[i], prev=WEEKS[i-1];
+  // running water level
+  let level=100; const levels=[100];
+  wk.b.forEach(b=>{level=Math.min(level,100-b);levels.push(level)});
+  levels.forEach((L,k)=>{const h=L*UNIT;parts.waters[k].setAttribute("y",FLOOR-h);parts.waters[k].setAttribute("height",h)});
+  wk.b.forEach((b,k)=>{
+    const h=b*UNIT;parts.bars[k].setAttribute("y",FLOOR-h);parts.bars[k].setAttribute("height",h);
+    parts.bars[k].setAttribute("fill",b<30?"#C97A6D":"var(--steel)");
+    parts.lights[k].setAttribute("fill",lightOf(b));parts.nums[k].textContent=b;
+  });
+  const comp=levels[levels.length-1];
+  parts.levelText.textContent=comp;
+  parts.levelText.setAttribute("y",FLOOR-comp*UNIT-8);
+  const maxB=Math.max(...wk.b), bottleneck=VECTORS[wk.b.indexOf(maxB)];
+  document.getElementById("rComposite").innerHTML=comp+'<small> / 100</small>';
+  document.getElementById("rStage").textContent=stageOf(comp);
+  document.getElementById("rBottleneck").textContent=bottleneck.id+" "+bottleneck.short+" ("+maxB+")";
+  document.getElementById("rObserved").innerHTML=wk.o.toFixed(1)+'<small>%</small>';
+  document.getElementById("weekLabel").textContent="Week of "+fmt(wk.w);
+  // rows
+  VECTORS.forEach((v,k)=>{
+    const b=wk.b[k], d=prev?b-prev.b[k]:0;
+    const row=rowEls[k];
+    row.light.style.background=lightOf(b);
+    row.score.textContent=b;
+    row.delta.textContent=d===0?"—":(d>0?"+"+d:""+d);
+    row.delta.className="delta"+(d<0?" down":"");
+  });
+}
+
+function fmt(s){const d=new Date(s+"T00:00:00");return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}
+
+// Rows
+const rowEls=[];
+const rows=document.getElementById("rows");
+VECTORS.forEach((v,k)=>{
+  const a=document.createElement("a");a.className="row";a.href="#v"+v.id;
+  a.innerHTML='<span class="light"></span><span class="n">'+v.id+'</span><span class="name">'+v.name+'<small>'+(v.kind==="gate"?"gate":"levee")+'</small></span><span class="score"></span><span class="delta"></span>';
+  rows.appendChild(a);
+  rowEls.push({light:a.querySelector(".light"),score:a.querySelector(".score"),delta:a.querySelector(".delta")});
+});
+
+function init(){
+// Channels
+const ch=document.getElementById("channels");
+VECTORS.forEach((v,k)=>{
+  const s=document.createElement("section");s.className="channel";s.id="v"+v.id;
+  let items="";
+  for(let i=WEEKS.length-1;i>=0;i--){
+    const wk=WEEKS[i], b=wk.b[k], d=i>0?b-WEEKS[i-1].b[k]:0;
+    const note=wk.n&&wk.n[v.id];
+    const dTxt=d===0?"—":(d>0?"+"+d:""+d);
+    items+='<li><span class="d">'+fmt(wk.w)+'</span><span class="s">'+b+'</span><span class="c'+(d<0?" down":"")+'">'+dTxt+'</span><span class="m'+(note?"":" quiet")+'">'+(note||(d===0?"No change; carried forward.":"Scored; no event logged."))+'</span></li>';
+  }
+  s.innerHTML='<h3>'+v.id+'. '+v.name+' <span style="font-weight:400;color:var(--ink-2);font-size:15px">('+v.kind+')</span></h3><p class="def">'+v.def+'</p><p class="why">'+v.why+'</p><ul class="log">'+items+'</ul>';
+  ch.appendChild(s);
+});
+
+// Controls
+const slider=document.getElementById("slider");
+slider.max=WEEKS.length-1; slider.value=WEEKS.length-1;
+slider.addEventListener("input",()=>{stop();render(+slider.value)});
+let timer=null; const play=document.getElementById("play");
+function stop(){if(timer){clearInterval(timer);timer=null;play.textContent="Play"}}
+play.addEventListener("click",()=>{
+  if(timer){stop();return}
+  if(+slider.value>=WEEKS.length-1) slider.value=0;
+  render(+slider.value); play.textContent="Pause";
+  timer=setInterval(()=>{if(+slider.value>=WEEKS.length-1){stop();return}slider.value=+slider.value+1;render(+slider.value)},900);
+});
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT")return;
+  if(e.key==="ArrowRight"&&+slider.value<WEEKS.length-1){slider.value=+slider.value+1;stop();render(+slider.value)}
+  if(e.key==="ArrowLeft"&&+slider.value>0){slider.value=+slider.value-1;stop();render(+slider.value)}
+});
+
+render(WEEKS.length-1);
+}
+
+buildScene();
+loadWeeks().then(w=>{WEEKS=w;init()}).catch(e=>{
+  console.error(e);
+  document.getElementById("weekLabel").textContent="Data could not be loaded.";
+});
+</script>
+</body>
+</html>
