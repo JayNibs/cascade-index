@@ -95,7 +95,7 @@
 
 <div class="lede">
   <p>This is not about machines taking over. It is about paychecks. When enough white-collar paychecks stop, everyone those paychecks were paying stops getting paid too: the mortgage, the daycare, the dentist, the contractor. That second round is what turns a bad year for one profession into an economy-wide problem.</p>
-  <p>The panel below tracks the seven things currently standing between us and that. Three are gates, technical limits on what AI can reliably do. Four are levees, the legal, economic and social walls that slow a company from acting on it. Every barrier is scored from 100, fully intact, to 0, gone. Water can only reach the economy as far as the tallest remaining wall allows, so the index is simply 100 minus the tallest barrier.</p>
+  <p>The panel below tracks the seven things currently standing between us and that. Three are gates, technical limits on what AI can reliably do. Four are levees, the legal, economic and social walls that slow a company from acting on it. Every barrier is scored from 100, fully intact, to 0, gone. Each barrier lets through only what its opening allows, so the index is simply 100 minus the tallest barrier.</p>
 </div>
 
 <section class="panel" aria-label="Control panel">
@@ -197,12 +197,16 @@ function buildScene(){
   for(let i=0;i<BX.length-1;i++) segs.push([BX[i]+BW, BX[i+1]]);
   segs.push([BX[6]+BW, LAST.x+LAST.w]);
   segs.forEach(([a,b])=>{const r=el("rect",{x:a,y:FLOOR,width:b-a,height:0,fill:"var(--water)"});r.setAttribute("class","water");scene.appendChild(r);parts.waters.push(r)});
+  // Water passing through each gate's opening (drawn under the gate, at the downstream level)
+  parts.gaps=[];
+  BX.forEach(x=>{const r=el("rect",{x:x,y:FLOOR,width:BW,height:0,fill:"var(--water)"});r.setAttribute("class","water");scene.appendChild(r);parts.gaps.push(r)});
   // Floor and ceiling
   scene.appendChild(el("line",{x1:RES.x,y1:FLOOR,x2:LAST.x+LAST.w,y2:FLOOR,stroke:"var(--steel)","stroke-width":1.5}));
   scene.appendChild(el("line",{x1:BX[0],y1:TOP,x2:LAST.x+LAST.w,y2:TOP,stroke:"var(--panel-rule)","stroke-width":1,"stroke-dasharray":"3 4"}));
   // Barriers, lights, numerals, labels
   VECTORS.forEach((v,i)=>{
-    const r=el("rect",{x:BX[i],y:FLOOR,width:BW,height:0,fill:"var(--steel)",stroke:"var(--steel-2)","stroke-width":1});
+    // Each barrier is a gate hung from the ceiling: its slab is as tall as the score, leaving an opening at the floor of 100 minus the score.
+    const r=el("rect",{x:BX[i],y:TOP,width:BW,height:0,fill:"var(--steel)",stroke:"var(--steel-2)","stroke-width":1});
     r.setAttribute("class","bar");scene.appendChild(r);parts.bars.push(r);
     const c=el("circle",{cx:BX[i]+BW/2,cy:52,r:7,fill:"var(--steel)"});scene.appendChild(c);parts.lights.push(c);
     const n=txt(BX[i]+BW/2,80,"—","num");scene.appendChild(n);parts.nums.push(n);
@@ -229,8 +233,9 @@ function render(i){
   let level=100; const levels=[100];
   wk.b.forEach(b=>{level=Math.min(level,100-b);levels.push(level)});
   levels.forEach((L,k)=>{const h=L*UNIT;parts.waters[k].setAttribute("y",FLOOR-h);parts.waters[k].setAttribute("height",h)});
+  parts.gaps.forEach((g,k)=>{const h=levels[k+1]*UNIT;g.setAttribute("y",FLOOR-h);g.setAttribute("height",h)});
   wk.b.forEach((b,k)=>{
-    const h=b*UNIT;parts.bars[k].setAttribute("y",FLOOR-h);parts.bars[k].setAttribute("height",h);
+    const h=b*UNIT;parts.bars[k].setAttribute("y",TOP);parts.bars[k].setAttribute("height",h);
     parts.bars[k].setAttribute("fill",b<30?"#C97A6D":"var(--steel)");
     parts.lights[k].setAttribute("fill",lightOf(b));parts.nums[k].textContent=b;
   });
