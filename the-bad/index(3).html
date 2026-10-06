@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Bad — AI catastrophic-risk trend model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F2EC; --ink:#22262B; --ink-2:#5B6169; --rule:#CFCBC0; --panel:rgba(251,250,246,.88);
+    --cap:#2E8F83; --exp:#3F6FD6; --ctl:#C58A10; --prs:#C73D31; --light:#D98A1E;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;overflow:hidden}
+  #scene{position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;touch-action:none}
+  .hud{position:fixed;left:0;right:0;pointer-events:none;padding:14px 16px}
+  .hud>*{pointer-events:auto}
+  #top{top:0}
+  #bottom{bottom:0;padding-bottom:max(14px,env(safe-area-inset-bottom))}
+  h1{font-size:20px;font-weight:500;margin:0;letter-spacing:.01em}
+  h1 small{display:block;font-size:12px;font-weight:400;color:var(--ink-2);margin-top:2px}
+  .comps{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .comp{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:6px 10px;min-width:92px}
+  .comp .lab{font-size:11px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+  .comp .lab i{width:8px;height:8px;border-radius:2px;display:inline-block}
+  .comp .val{font-family:"IBM Plex Mono",monospace;font-size:20px;line-height:1.1;margin-top:2px}
+  .comp .val span{font-size:11px;color:var(--ink-2);margin-left:4px}
+  #week{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;max-width:560px}
+  #week label{font-size:12px;color:var(--ink-2);white-space:nowrap}
+  #week input[type=range]{flex:1;accent-color:var(--ink);min-width:80px}
+  #week .date{font-family:"IBM Plex Mono",monospace;font-size:13px;white-space:nowrap}
+  #week .date em{font-style:normal;color:var(--ink-2);font-size:11px;margin-left:6px}
+  #hint{font-size:11px;color:var(--ink-2);margin:8px 0 0}
+  #info{position:fixed;right:16px;top:16px;width:300px;max-width:calc(100vw - 32px);background:var(--panel);box-shadow:0 2px 12px rgba(0,0,0,.08);border:1px solid var(--rule);border-radius:6px;padding:12px 14px;display:none;backdrop-filter:blur(6px)}
+  #info.on{display:block}
+  #info .id{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2)}
+  #info .nm{font-size:15px;font-weight:500;margin:2px 0 6px}
+  #info .sc{font-family:"IBM Plex Mono",monospace;font-size:24px;line-height:1.1}
+  #info .sc span{font-size:12px;color:var(--ink-2);margin-left:6px}
+  #info .note{font-size:13px;color:var(--ink-2);margin:8px 0 0;line-height:1.45}
+  #info .x{position:absolute;right:8px;top:6px;background:none;border:0;color:var(--ink-2);font-size:18px;cursor:pointer}
+  #bad{position:fixed;inset:0;background:rgba(34,38,43,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
+  #bad.on{display:flex}
+  #bad .card{background:#FBFAF6;border:1px solid var(--rule);box-shadow:0 0 60px rgba(217,138,30,.25);border-radius:8px;max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:18px 20px}
+  #bad h2{font-size:22px;font-weight:500;margin:0;color:var(--light)}
+  #bad .sub{font-size:13px;color:var(--ink-2);margin:4px 0 14px}
+  .path{border-top:1px solid var(--rule);padding:12px 0}
+  .path .hd{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .path .hd b{font-weight:500;font-size:15px}
+  .path .hd .m{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2);text-align:right}
+  .path .m strong{color:var(--ink);font-weight:500}
+  .path ul{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--ink-2);line-height:1.5}
+  .path .pre{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .path .pre span{font-family:"IBM Plex Mono",monospace;font-size:11px;border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--ink-2)}
+  .path .pre span.weak{border-color:var(--light);color:var(--light)}
+  #bad .x{float:right;background:none;border:1px solid var(--rule);color:var(--ink);border-radius:4px;padding:4px 10px;cursor:pointer;font:inherit;font-size:13px}
+  #err{position:fixed;left:16px;right:16px;bottom:96px;color:var(--prs);font-size:13px;display:none;background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;max-width:560px;line-height:1.45}
+  @media (max-width:640px){
+    .comps{gap:5px;margin-top:8px;flex-wrap:nowrap}
+    .comp{min-width:0;flex:1 1 0;padding:4px 6px}
+    .comp .lab{font-size:9px;gap:4px;white-space:nowrap;overflow:hidden}
+    .comp .val{font-size:15px}
+    .comp .val span{display:none}
+    h1 small{font-size:11px}
+    #info{top:auto;bottom:92px;right:16px;left:16px;width:auto}
+    h1{font-size:18px}
+  }
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+
+<div class="hud" id="top">
+  <h1>The Bad<small>AI catastrophic-risk trend model · sixteen roots, four arms, one destination</small></h1>
+  <div class="comps" id="comps"></div>
+</div>
+
+<div id="info"><button class="x" id="infoX" aria-label="close">×</button><div class="id"></div><div class="nm"></div><div class="sc"></div><div class="note"></div></div>
+
+<div class="hud" id="bottom">
+  <div id="week">
+    <label for="slider">Week</label>
+    <input id="slider" type="range" min="0" max="0" value="0" step="1">
+    <div class="date" id="date">—</div>
+  </div>
+  <p id="hint">Drag to rotate · pinch or scroll to zoom · tap a vine for its root · tap the box at the top for the catastrophes</p>
+</div>
+<div id="err">Data could not be loaded.</div>
+
+<div id="bad"><div class="card"><button class="x" id="badX">Close</button><h2>The bad</h2><p class="sub">Four paths, each a set of preconditions that must all be met at once. Weakest link is what has to move; geometric mean penalizes any precondition far from met. Neither is a probability.</p><div id="paths"></div></div></div>
+
+<script>
+// Load three.js from the first CDN that answers, then start the app.
+(function(){
+  const CDNS=[
+    ["https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js","https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"],
+    ["https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js","https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"],
+    ["https://unpkg.com/three@0.128.0/build/three.min.js","https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"]
+  ];
+  function add(src){return new Promise((ok,bad)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=()=>bad(src);document.head.appendChild(s)})}
+  async function go(i){
+    if(i>=CDNS.length){window.__threeFailed=true;return}
+    try{await add(CDNS[i][0]);await add(CDNS[i][1])}catch(e){return go(i+1)}
+  }
+  window.__threeReady=go(0);
+})();
+</script>
+<script>
+const $=id=>document.getElementById(id);
+function showErr(t){const e=$("err");e.style.display="block";e.textContent=t}
+</script>
+<script>
+// ---------- model ----------
+const ARMS=[
+  {key:"C",name:"Capability",color:0x1F7F74,css:"var(--cap)",dir:[0,1]},
+  {key:"E",name:"Exposure",color:0x2F5FC4,css:"var(--exp)",dir:[1,0]},
+  {key:"K",name:"Control",color:0xB87B0A,css:"var(--ctl)",dir:[0,-1]},
+  {key:"P",name:"Pressure",color:0xB8322A,css:"var(--prs)",dir:[-1,0]},
+];
+const ROOTS={
+  C1:"Frontier task horizon",C2:"Benchmark trajectory",C3:"Cost per unit capability",C4:"Autonomy in deployment",
+  E1:"Breadth of dependence",E2:"Agentic deployment share",E3:"Access diffusion",E4:"Physical coupling / incidents",
+  K1:"Alignment reliability",K2:"Detection / interpretability",K3:"Intervention capacity",K4:"Governance in force",
+  P1:"Race intensity",P2:"Compute buildout",P3:"State and military deployment",P4:"Attacker / defender asymmetry",
+};
+const PATHS=[
+  {name:"Misuse",sub:"cyber · bio · infrastructure",pre:{"threshold":["C1","C2"],"access":["E3"],"safeguards weak":["K3"],"execution path":["E4"],"defenders behind":["P4"]},
+   list:["Engineered pandemic from AI-assisted biodesign","Grid, water or pipeline control-system sabotage","Financial-system breach or settlement-rail compromise","Mass autonomous cybercrime overwhelming response capacity"]},
+  {name:"Loss of control",sub:"misaligned or rogue system",pre:{"threshold":["C1","C2"],"autonomy":["C4","E2"],"misalignment":["K1"],"detection failing":["K2"],"no kill switch":["K3"]},
+   list:["Rogue internal deployment that resists shutdown","Self-exfiltration of model weights to uncontrolled compute","Covert sabotage of safety research or successor training","Deceptive alignment that survives evaluation and deploys at scale"]},
+  {name:"Systemic",sub:"economic · infrastructural",pre:{"dependence":["E1"],"correlated failure":["E2","P2"],"speed":["C4","E4"],"no circuit breaker":["K4"]},
+   list:["Correlated failure across a shared base model or provider","Flash-crash cascade through agent-driven markets","Labor-displacement shock faster than institutions absorb","Capex collapse propagating through the AI supply chain"]},
+  {name:"Arms race",sub:"state escalation",pre:{"decision loops":["P3"],"compressed timelines":["P1"],"miscalculation":["P1","P2"],"veto absent":["K3","K4"]},
+   list:["Automated escalation between AI-assisted command systems","Autonomous targeting error with mass casualties","Pre-emptive strike driven by a perceived capability gap","Compute or chip infrastructure as a kinetic target"]},
+];
+const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+function compute(week){
+  const r=week.roots, comps={}, paths=[];
+  ARMS.forEach(a=>{comps[a.key]=Math.round(mean([1,2,3,4].map(i=>r[a.key+i])))});
+  PATHS.forEach(p=>{
+    const pre=Object.entries(p.pre).map(([k,ids])=>[k,Math.round(mean(ids.map(i=>r[i])))]);
+    const vals=pre.map(x=>x[1]), min=Math.min(...vals);
+    const geo=Math.round(Math.exp(mean(vals.map(v=>Math.log(Math.max(v,1)/100))))*100);
+    paths.push({name:p.name,sub:p.sub,list:p.list,pre,min,geo});
+  });
+  const idx=Math.round(comps.C*comps.E*comps.P/Math.max(comps.K,1)/100);
+  return {comps,paths,idx,maxGeo:Math.max(...paths.map(p=>p.geo))};
+}
+
+// ---------- scene ----------
+let canvas,renderer,scene,camera,controls,sun,glow,box,boxCore,embers,emberN,emberSeed,emberPos,ray,clock,TOP,HAS3D=false;
+const H=8.2;                                   // max vine height
+const ARM_LEN=5.4, SPOTS=[1.3,2.6,3.9,5.2];
+const VINES={};
+function initScene(){
+canvas=document.getElementById("scene");
+try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false}); }
+catch(e){ showErr("Your browser could not start WebGL, so the 3D scene can't draw. The numbers above are still live. Try another browser or turn off hardware-acceleration blocking."); return false; }
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+renderer.setClearColor(0xF4F2EC,1);
+renderer.toneMapping=THREE.NoToneMapping;
+scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0xF4F2EC,0.028);
+camera=new THREE.PerspectiveCamera(42,1,0.1,200);
+camera.position.set(13,8,17);
+controls=new THREE.OrbitControls(camera,canvas);
+controls.target.set(0,4.4,0);
+controls.enableDamping=true; controls.dampingFactor=0.06;
+controls.minDistance=5; controls.maxDistance=40;
+controls.maxPolarAngle=Math.PI*0.52;
+controls.autoRotate=true; controls.autoRotateSpeed=0.45;
+controls.addEventListener("start",()=>{controls.autoRotate=false});
+
+scene.add(new THREE.HemisphereLight(0xFFFFFF,0xBFBAB0,0.7));
+TOP=new THREE.Vector3(0,H+1.1,0);        // the light and the box
+sun=new THREE.PointLight(0xFFB84D,1.4,40,1.6); sun.position.copy(TOP); scene.add(sun);
+const keyL=new THREE.DirectionalLight(0xFFFFFF,0.35); keyL.position.set(6,10,4); scene.add(keyL);
+
+// floor
+const floor=new THREE.Mesh(new THREE.CircleGeometry(9,96),new THREE.MeshStandardMaterial({color:0xD9D5CB,roughness:1,metalness:0}));
+floor.rotation.x=-Math.PI/2; floor.position.y=-0.06; scene.add(floor);
+const ring=new THREE.Mesh(new THREE.RingGeometry(5.6,5.64,128),new THREE.MeshBasicMaterial({color:0xC9C4B6,side:THREE.DoubleSide}));
+ring.rotation.x=-Math.PI/2; ring.position.y=-0.05; scene.add(ring);
+
+// cross
+
+const armMat=new THREE.MeshStandardMaterial({color:0x3A4048,roughness:0.75,metalness:0.05});
+ARMS.forEach(a=>{
+  const g=new THREE.BoxGeometry(ARM_LEN,0.08,0.42);
+  const m=new THREE.Mesh(g,armMat);
+  const [dx,dz]=a.dir;
+  m.position.set(dx*ARM_LEN/2,0,dz*ARM_LEN/2);
+  m.rotation.y=dz!==0?Math.PI/2:0;
+  scene.add(m);
+  // arm tip label
+  const lab=textSprite(a.name.toUpperCase(),{size:34,color:"#"+a.color.toString(16).padStart(6,"0"),mono:false});
+  lab.position.set(dx*(ARM_LEN+0.9),0.25,dz*(ARM_LEN+0.9)); lab.scale.multiplyScalar(0.55); scene.add(lab);
+});
+const hub=new THREE.Mesh(new THREE.CylinderGeometry(0.34,0.34,0.1,32),armMat); scene.add(hub);
+
+// the bad: box + glow
+box=new THREE.Group(); box.position.copy(TOP); scene.add(box);
+boxCore=new THREE.Mesh(new THREE.BoxGeometry(1.1,1.1,1.1),new THREE.MeshStandardMaterial({color:0x22262B,roughness:0.4,metalness:0.2,emissive:0x8A4A08,emissiveIntensity:0.6,transparent:true,opacity:0.95}));
+box.add(boxCore);
+const boxEdges=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.14,1.14,1.14)),new THREE.LineBasicMaterial({color:0xD98A1E,transparent:true,opacity:0.95}));
+box.add(boxEdges);
+const glowTex=radialTexture();
+glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xF2A33A,transparent:true,opacity:0.55,depthWrite:false,blending:THREE.NormalBlending}));
+glow.scale.set(5,5,1); box.add(glow);
+const badLab=textSprite("the bad",{size:40,color:"#22262B",mono:true}); badLab.position.set(0,1.05,0); box.add(badLab);
+// embers inside the box
+emberN=90; emberPos=new Float32Array(emberN*3); emberSeed=[];
+for(let i=0;i<emberN;i++){emberSeed.push(Math.random()*Math.PI*2,Math.random(),Math.random())}
+embers=new THREE.Points(new THREE.BufferGeometry().setAttribute("position",new THREE.BufferAttribute(emberPos,3)),
+  new THREE.PointsMaterial({color:0xFFD27A,size:0.06,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.NormalBlending}));
+box.add(embers);
+
+// vines
+ARMS.forEach(a=>{
+  const [dx,dz]=a.dir;
+  SPOTS.forEach((r,i)=>{
+    const id=a.key+(i+1);
+    buildVine(id,a,new THREE.Vector3(dx*r,0.07,dz*r),(i+1)*1.7+ARMS.indexOf(a)*0.9);
+  });
+});
+HAS3D=true; return true;
+}
+
+const SEG=96;
+function vineCurve(base,score,seed){
+  const s=score/100;
+  const h=0.15+s*(H-0.15);
+  const pull=Math.pow(s,1.35);                      // convergence toward the axis
+  const tx=base.x*(1-pull*0.92), tz=base.z*(1-pull*0.92);
+  const ty=Math.min(h,TOP.y-0.75);
+  const p0=base.clone();
+  const p1=new THREE.Vector3(base.x*1.08,h*0.42,base.z*1.08);
+  const p2=new THREE.Vector3(tx*1.35+Math.sin(seed)*0.25,h*0.82,tz*1.35+Math.cos(seed)*0.25);
+  const p3=new THREE.Vector3(tx,ty,tz);
+  const bez=new THREE.CubicBezierCurve3(p0,p1,p2,p3);
+  // add organic wobble
+  const pts=[];
+  for(let i=0;i<=SEG;i++){
+    const t=i/SEG, p=bez.getPoint(t);
+    const w=0.09*Math.sin(t*9+seed)*t*(1-t)*4;
+    p.x+=w*Math.cos(seed*2+t*5); p.z+=w*Math.sin(seed*2+t*5);
+    pts.push(p);
+  }
+  return new THREE.CatmullRomCurve3(pts);
+}
+function buildVine(id,arm,base,seed){
+  const mat=new THREE.MeshStandardMaterial({color:arm.color,roughness:0.7,metalness:0.0,emissive:arm.color,emissiveIntensity:0.05});
+  const mesh=new THREE.Mesh(new THREE.TubeGeometry(vineCurve(base,1,seed),SEG,0.07,8,false),mat);
+  mesh.userData.id=id; scene.add(mesh);
+  const bud=new THREE.Mesh(new THREE.SphereGeometry(0.11,12,12),new THREE.MeshStandardMaterial({color:arm.color,emissive:arm.color,emissiveIntensity:0.6}));
+  scene.add(bud);
+  const base_=new THREE.Mesh(new THREE.CylinderGeometry(0.16,0.16,0.06,20),new THREE.MeshStandardMaterial({color:arm.color,roughness:0.6}));
+  base_.position.copy(base); base_.position.y=0.07; scene.add(base_);
+  const lab=textSprite(id,{size:26,color:"#5B6169",mono:true}); lab.position.set(base.x,0.4,base.z); lab.scale.multiplyScalar(0.55); scene.add(lab);
+  mesh.geometry.setDrawRange(0,0); bud.visible=false;
+  VINES[id]={mesh,mat,bud,base,arm,seed,score:0,grow:0,ready:false,curve:null};
+}
+function setVine(v,score){
+  v.score=score;
+  const curve=vineCurve(v.base,score,v.seed);
+  v.mesh.geometry.dispose();
+  v.mesh.geometry=new THREE.TubeGeometry(curve,SEG,0.045+0.07*(score/100),8,false);
+  v.curve=curve; v.ready=true; v.bud.visible=true;
+  const s=score/100;
+  v.mat.emissiveIntensity=0.05+0.25*s*s;
+}
+
+// ---------- helpers ----------
+function textSprite(text,{size=32,color="#fff",mono=false}){
+  const c=document.createElement("canvas"); const ctx=c.getContext("2d");
+  const font=(size*2)+"px "+(mono?'"IBM Plex Mono",monospace':'"IBM Plex Sans",sans-serif');
+  ctx.font=font; const w=Math.ceil(ctx.measureText(text).width)+40;
+  c.width=w; c.height=size*2+24;
+  ctx.font=font; ctx.fillStyle=color; ctx.textBaseline="middle"; ctx.fillText(text,20,c.height/2);
+  const tex=new THREE.CanvasTexture(c); tex.minFilter=THREE.LinearFilter;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false}));
+  sp.scale.set(c.width/120,c.height/120,1); return sp;
+}
+function radialTexture(){
+  const c=document.createElement("canvas"); c.width=c.height=256; const g=c.getContext("2d");
+  const r=g.createRadialGradient(128,128,0,128,128,128); r.addColorStop(0,"rgba(255,190,90,0.95)"); r.addColorStop(0.35,"rgba(255,190,90,0.30)"); r.addColorStop(1,"rgba(255,190,90,0)");
+  g.fillStyle=r; g.fillRect(0,0,256,256); return new THREE.CanvasTexture(c);
+}
+
+// ---------- data + ui ----------
+let DATA=null, CUR=0, calc=null;
+async function load(){
+  try{
+    const r=await fetch("data.json?v="+Date.now(),{cache:"no-store"});
+    if(!r.ok) throw new Error(r.status);
+    DATA=await r.json();
+    DATA.weeks.sort((a,b)=>a.date<b.date?-1:1);
+  }catch(e){ $("err").style.display="block"; return; }
+  const sl=$("slider"); sl.max=DATA.weeks.length-1; sl.value=DATA.weeks.length-1;
+  sl.oninput=()=>showWeek(Number(sl.value));
+  showWeek(DATA.weeks.length-1,true);
+}
+function showWeek(i,first){
+  CUR=i; const w=DATA.weeks[i]; calc=compute(w);
+  $("date").innerHTML=w.date+(w.backcast?"<em>backcast</em>":"")+(i===DATA.weeks.length-1&&!w.backcast?"<em>latest</em>":"");
+  if(HAS3D) Object.keys(VINES).forEach(id=>{
+    const v=VINES[id]; const prev=v.score;
+    setVine(v,w.roots[id]??0);
+    v.grow=first?0:Math.min(1,prev/Math.max(v.score,1));   // regrow from where it was
+  });
+  // composites
+  $("comps").innerHTML=ARMS.map(a=>'<div class="comp"><div class="lab"><i style="background:'+a.css+'"></i>'+a.name+'</div><div class="val">'+calc.comps[a.key]+'<span>/100</span></div></div>').join("")+
+    '<div class="comp"><div class="lab"><i style="background:var(--light)"></i>Index</div><div class="val">'+calc.idx+'<span>C×E×P÷K</span></div></div>';
+  // the box
+  const g=calc.maxGeo/100;
+  if(HAS3D){ glow.material.opacity=0.25+0.6*g; glow.scale.setScalar(3.5+5*g);
+  sun.intensity=0.9+1.6*g; boxCore.material.emissiveIntensity=0.3+1.2*g; }
+  // paths panel
+  $("paths").innerHTML=calc.paths.map(p=>'<div class="path"><div class="hd"><b>'+p.name+' <span style="color:var(--ink-2);font-size:12px;font-weight:400">'+p.sub+'</span></b><div class="m">weakest <strong>'+p.min+'</strong> · geo mean <strong>'+p.geo+'</strong></div></div>'+
+    '<div class="pre">'+p.pre.map(([k,v])=>'<span class="'+(v===p.min?"weak":"")+'">'+k+' '+v+'</span>').join("")+'</div><ul>'+p.list.map(x=>'<li>'+x+'</li>').join("")+'</ul></div>').join("");
+  if(info.id) showInfo(info.id);
+}
+
+// picking
+
+const info={id:null};
+function showInfo(id){
+  const w=DATA.weeks[CUR], arm=ARMS.find(a=>a.key===id[0]), prev=CUR>0?DATA.weeks[CUR-1].roots[id]:null;
+  info.id=id;
+  const el=$("info"); el.classList.add("on");
+  el.querySelector(".id").textContent=id+" · "+arm.name;
+  el.querySelector(".nm").textContent=ROOTS[id];
+  el.querySelector(".sc").innerHTML=w.roots[id]+'<span>/100'+(prev!==null?" · prev "+prev+(w.roots[id]-prev>=0?" (+"+(w.roots[id]-prev)+")":" ("+(w.roots[id]-prev)+")"):"")+'</span>';
+  el.querySelector(".note").textContent=(w.notes&&w.notes[id])||"No note this week.";
+}
+$("infoX").onclick=()=>{info.id=null;$("info").classList.remove("on")};
+$("badX").onclick=()=>$("bad").classList.remove("on");
+$("bad").addEventListener("click",e=>{if(e.target===$("bad"))$("bad").classList.remove("on")});
+function start3D(){
+ray=new THREE.Raycaster();
+let downAt=null;
+canvas.addEventListener("pointerdown",e=>{downAt=[e.clientX,e.clientY]});
+canvas.addEventListener("pointerup",e=>{
+  if(!downAt||Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>8){downAt=null;return}
+  downAt=null;
+  const r=canvas.getBoundingClientRect();
+  const m=new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);
+  ray.setFromCamera(m,camera);
+  const hitBox=ray.intersectObject(boxCore,false);
+  if(hitBox.length){$("bad").classList.add("on");return}
+  const hits=ray.intersectObjects(Object.values(VINES).map(v=>v.mesh),false);
+  if(hits.length) showInfo(hits[0].object.userData.id);
+});
+
+// ---------- loop ----------
+function resize(){
+  const w=window.innerWidth,h=window.innerHeight;
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+  if(w<640){camera.position.set(17,9,22);controls.target.set(0,5.8,0)}
+}
+window.addEventListener("resize",resize); resize();
+clock=new THREE.Clock();
+function frame(){
+  const dt=Math.min(clock.getDelta(),0.05), t=clock.elapsedTime;
+  Object.values(VINES).forEach(v=>{
+    if(!v.ready) return;
+    if(v.grow<1){
+      v.grow=Math.min(1,v.grow+dt*0.55);
+      const e=1-Math.pow(1-v.grow,2.2);
+      const idx=v.mesh.geometry.index.count;
+      v.mesh.geometry.setDrawRange(0,Math.floor(idx*e/6)*6);
+      const p=v.curve.getPoint(e); v.bud.position.copy(p);
+    }else{
+      v.mesh.geometry.setDrawRange(0,Infinity);
+      v.bud.position.copy(v.curve.getPoint(1));
+    }
+    v.bud.scale.setScalar(0.9+0.25*Math.sin(t*2.2+v.seed));
+  });
+  // embers
+  const pos=embers.geometry.attributes.position.array;
+  for(let i=0;i<emberN;i++){
+    const a=emberSeed[i*3]+t*0.35, r=0.15+emberSeed[i*3+1]*0.35, y=((emberSeed[i*3+2]+t*0.08)%1)*0.9-0.45;
+    pos[i*3]=Math.cos(a)*r; pos[i*3+1]=y; pos[i*3+2]=Math.sin(a)*r;
+  }
+  embers.geometry.attributes.position.needsUpdate=true;
+  box.rotation.y=t*0.12;
+  glow.material.opacity=(glow.material.opacity)*(0.985)+ (0.25+0.6*(calc?calc.maxGeo/100:0.3)+0.06*Math.sin(t*1.7))*0.015;
+  controls.update();
+  renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+frame();
+}
+
+// ---------- boot ----------
+load();                                   // data and numbers never wait on 3D
+window.__threeReady.then(()=>{
+  if(window.__threeFailed||typeof THREE==="undefined"){
+    showErr("The 3D library could not be downloaded (a VPN or content blocker may be stopping cdnjs, jsdelivr and unpkg). The numbers above are live; the vines need that library.");
+    return;
+  }
+  if(initScene()){ start3D(); if(DATA) showWeek(CUR,true); }
+});
+</script>
+</body>
+</html>
