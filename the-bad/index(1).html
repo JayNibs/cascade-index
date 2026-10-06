@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Bad — AI catastrophic-risk trend model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F2EC; --ink:#22262B; --ink-2:#5B6169; --rule:#CFCBC0; --panel:rgba(251,250,246,.88);
+    --cap:#2E8F83; --exp:#3F6FD6; --ctl:#C58A10; --prs:#C73D31; --light:#D98A1E;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif}
+  html{scroll-behavior:smooth}
+  #hero{position:relative;height:100vh;height:100svh;overflow:hidden;border-bottom:1px solid var(--rule)}
+  #scene{position:absolute;top:0;left:0;width:100%;height:100%;display:block;touch-action:none}
+  .hud{position:absolute;left:0;right:0;pointer-events:none;padding:14px 16px}
+  .hud>*{pointer-events:auto}
+  #top{top:0}
+  #bottom{bottom:0;padding-bottom:max(14px,env(safe-area-inset-bottom))}
+  h1{font-size:20px;font-weight:500;margin:0;letter-spacing:.01em}
+  h1 small{display:block;font-size:12px;font-weight:400;color:var(--ink-2);margin-top:2px}
+  .comps{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .comp{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:6px 10px;min-width:92px}
+  .comp .lab{font-size:11px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+  .comp .lab i{width:8px;height:8px;border-radius:2px;display:inline-block}
+  .comp .val{font-family:"IBM Plex Mono",monospace;font-size:20px;line-height:1.1;margin-top:2px}
+  .comp .val span{font-size:11px;color:var(--ink-2);margin-left:4px}
+  #week{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;max-width:560px}
+  #week label{font-size:12px;color:var(--ink-2);white-space:nowrap}
+  #week input[type=range]{flex:1;accent-color:var(--ink);min-width:80px}
+  #week .date{font-family:"IBM Plex Mono",monospace;font-size:13px;white-space:nowrap}
+  #week .date em{font-style:normal;color:var(--ink-2);font-size:11px;margin-left:6px}
+  #hint{font-size:11px;color:var(--ink-2);margin:8px 0 0}
+  #zoom{display:inline-flex;gap:4px;margin-left:8px;vertical-align:middle}
+  #zoom button{font:inherit;font-size:14px;line-height:1;width:26px;height:26px;border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:4px;cursor:pointer}
+  #readcue{position:absolute;right:16px;bottom:max(14px,env(safe-area-inset-bottom));pointer-events:auto;font-size:13px;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;text-decoration:none}
+  /* ---- document ---- */
+  #doc{max-width:760px;margin:0 auto;padding:48px 20px 96px;font-size:17px;line-height:1.6}
+  #doc h2{font-size:24px;font-weight:500;margin:56px 0 12px;padding-top:24px;border-top:1px solid var(--rule)}
+  #doc h2:first-child{margin-top:0;border-top:0;padding-top:0}
+  #doc h3{font-size:19px;font-weight:500;margin:36px 0 6px}
+  #doc h4{font-size:14px;font-weight:500;color:var(--ink-2);margin:18px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+  #doc p{margin:0 0 14px}
+  #doc ul,#doc ol{margin:0 0 14px;padding-left:22px}
+  #doc li{margin:0 0 6px}
+  #doc a{color:inherit}
+  #doc .lede{font-size:19px;color:var(--ink-2)}
+  #doc .arm{display:flex;align-items:center;gap:10px;margin-top:64px}
+  #doc .arm i{width:14px;height:14px;border-radius:3px;display:inline-block}
+  #doc .arm h2{margin:0;border:0;padding:0}
+  #doc .root{border-left:3px solid var(--rule);padding-left:18px;margin:28px 0 0}
+  #doc .root .code{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-2)}
+  #doc .now{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;background:#EBE8E0;border-radius:6px;padding:12px 14px;margin:10px 0 14px;font-size:15px}
+  #doc .now .n{font-family:"IBM Plex Mono",monospace;font-size:28px;line-height:1;grid-row:span 2;align-self:center}
+  #doc .now .n span{font-size:12px;color:var(--ink-2)}
+  #doc .now .l{font-size:12px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+  #doc .anchors{font-size:14px;color:var(--ink-2);font-family:"IBM Plex Mono",monospace;line-height:1.7}
+  #doc .src{font-size:14px;color:var(--ink-2)}
+  #doc .src li{margin:0 0 3px}
+  #doc table{border-collapse:collapse;width:100%;font-size:14px;margin:0 0 14px}
+  #doc th,#doc td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+  #doc th{font-weight:500;color:var(--ink-2)}
+  #doc .mono{font-family:"IBM Plex Mono",monospace}
+  #doc .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+  #doc .grid4 div{border-top:3px solid;padding:8px 0 0;font-size:14px}
+  #doc .grid4 b{display:block;font-weight:500;font-size:15px;margin-bottom:4px}
+  #doc .grid4 ul{padding-left:16px;margin:0;font-size:13px;color:var(--ink-2)}
+  @media (max-width:640px){#doc .grid4{grid-template-columns:1fr 1fr}}
+  #info{position:absolute;right:16px;top:16px;width:300px;max-width:calc(100vw - 32px);background:var(--panel);box-shadow:0 2px 12px rgba(0,0,0,.08);border:1px solid var(--rule);border-radius:6px;padding:12px 14px;display:none;backdrop-filter:blur(6px)}
+  #info.on{display:block}
+  #info .id{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2)}
+  #info .nm{font-size:15px;font-weight:500;margin:2px 0 6px}
+  #info .sc{font-family:"IBM Plex Mono",monospace;font-size:24px;line-height:1.1}
+  #info .sc span{font-size:12px;color:var(--ink-2);margin-left:6px}
+  #info .note{font-size:13px;color:var(--ink-2);margin:8px 0 0;line-height:1.45}
+  #info .x{position:absolute;right:8px;top:6px;background:none;border:0;color:var(--ink-2);font-size:18px;cursor:pointer}
+  #bad{position:fixed;inset:0;background:rgba(34,38,43,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
+  #bad.on{display:flex}
+  #bad .card{background:#FBFAF6;border:1px solid var(--rule);box-shadow:0 0 60px rgba(217,138,30,.25);border-radius:8px;max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:18px 20px}
+  #bad h2{font-size:22px;font-weight:500;margin:0;color:var(--light)}
+  #bad .sub{font-size:13px;color:var(--ink-2);margin:4px 0 14px}
+  .path{border-top:1px solid var(--rule);padding:12px 0}
+  .path .hd{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .path .hd b{font-weight:500;font-size:15px}
+  .path .hd .m{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2);text-align:right}
+  .path .m strong{color:var(--ink);font-weight:500}
+  .path ul{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--ink-2);line-height:1.5}
+  .path .pre{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .path .pre span{font-family:"IBM Plex Mono",monospace;font-size:11px;border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--ink-2)}
+  .path .pre span.weak{border-color:var(--light);color:var(--light)}
+  #bad .x{float:right;background:none;border:1px solid var(--rule);color:var(--ink);border-radius:4px;padding:4px 10px;cursor:pointer;font:inherit;font-size:13px}
+  #err{position:absolute;left:16px;right:16px;bottom:96px;color:var(--prs);font-size:13px;display:none;background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;max-width:560px;line-height:1.45}
+  @media (max-width:640px){
+    .comps{gap:5px;margin-top:8px;flex-wrap:nowrap}
+    .comp{min-width:0;flex:1 1 0;padding:4px 6px}
+    .comp .lab{font-size:9px;gap:4px;white-space:nowrap;overflow:hidden}
+    .comp .val{font-size:15px}
+    .comp .val span{display:none}
+    h1 small{font-size:11px}
+    #info{top:auto;bottom:92px;right:16px;left:16px;width:auto}
+    h1{font-size:18px}
+    #readcue{bottom:auto;top:calc(14px + 112px);right:16px;font-size:12px;padding:6px 10px}
+    #hint{padding-right:0}
+  }
+</style>
+</head>
+<body>
+<div id="hero">
+<canvas id="scene"></canvas>
+
+<div class="hud" id="top">
+  <h1>The Bad<small>AI catastrophic-risk trend model · sixteen roots, four arms, one destination</small></h1>
+  <div class="comps" id="comps"></div>
+</div>
+
+<div id="info"><button class="x" id="infoX" aria-label="close">×</button><div class="id"></div><div class="nm"></div><div class="sc"></div><div class="note"></div></div>
+
+<div class="hud" id="bottom">
+  <div id="week">
+    <label for="slider">Week</label>
+    <input id="slider" type="range" min="0" max="0" value="0" step="1">
+    <div class="date" id="date">—</div>
+  </div>
+  <p id="hint">Drag to rotate · tap a vine for its root · tap the box at the top for the catastrophes <span id="zoom"><button type="button" id="zin" aria-label="zoom in">+</button><button type="button" id="zout" aria-label="zoom out">−</button></span></p>
+</div>
+<a id="readcue" href="#doc">Read the method ↓</a>
+<div id="err">Data could not be loaded.</div>
+
+</div><!-- /hero -->
+
+<div id="doc">
+
+<h2>What this is</h2>
+<p class="lede">A weekly reading of whether the preconditions for an AI-driven catastrophe are converging. Sixteen trend lines, scored from public evidence, arranged so you can see which ones are rising, which are flat, and how far each disaster path is from having every one of its requirements met at once.</p>
+<p>It is not a forecast and it does not produce a probability. It is a structured way of watching. Every number on this page comes with the reasoning and the sources behind it, so you can judge for yourself whether the thing being measured is real and whether the score is fair. If you disagree with a score, the anchors tell you exactly which fact you would have to dispute.</p>
+<p>The picture above shows the current week. Each vine is one trend line; its height is its score, and the higher the score the more it bends toward the centre. The box at the top is the destination nobody wants to reach, and it brightens as the paths toward it converge. The slider replays earlier weeks.</p>
+
+<h2>Why it exists</h2>
+<p>The usual argument for near-term AI catastrophe runs: capability is on an exponential, every constraint that was supposed to slow it down has been engineered around, so extrapolate the line and something world-changing arrives soon. The usual argument against runs: conditions are not triggers, exponentials become S-curves, and confident short-window doom forecasts have a poor record.</p>
+<p>Both sides are extrapolating one line. The disagreement is really about a different question: what is the conversion rate from capability to harm, and is <em>that</em> rising? Capability alone does not produce a catastrophe. A catastrophe needs several things to be true at the same time, and each of those things has its own trend. Some are rising fast. Some are flat. Some are barely measured.</p>
+<p>This site exists to separate those lines, score each on its own evidence, and show where they stand relative to one another. The honest finding at launch was that the force (capability, competitive pressure) is well measured and rising steeply, while the resistance (alignment, detection, the ability to intervene, governance) is the least-measured part of the system and the only part not clearly improving. That asymmetry, not any single number, is the thing worth watching.</p>
+
+<h2>How it is built</h2>
+<p>Sixteen root trend lines are grouped into four arms. Each root is scored 0 to 100 every week, where 0 means the root contributes nothing to catastrophic hazard and 100 means it is at or past the level a catastrophe would require. Higher is always worse. On the Control arm this means a high score indicates <em>weak</em> control.</p>
+
+<div class="grid4">
+  <div style="border-color:var(--cap)"><b>Capability</b>The force.<ul><li>C1 Frontier task horizon</li><li>C2 Benchmark trajectory</li><li>C3 Cost per unit capability</li><li>C4 Autonomy in deployment</li></ul></div>
+  <div style="border-color:var(--exp)"><b>Exposure</b>The surface the force touches.<ul><li>E1 Breadth of dependence</li><li>E2 Agentic deployment share</li><li>E3 Access diffusion</li><li>E4 Physical coupling and incidents</li></ul></div>
+  <div style="border-color:var(--ctl)"><b>Control</b>The resistance. Higher = weaker.<ul><li>K1 Alignment reliability</li><li>K2 Detection and interpretability</li><li>K3 Intervention capacity</li><li>K4 Governance in force</li></ul></div>
+  <div style="border-color:var(--prs)"><b>Pressure</b>What closes the gap between force and resistance.<ul><li>P1 Race intensity</li><li>P2 Compute buildout</li><li>P3 State and military deployment</li><li>P4 Attacker/defender asymmetry</li></ul></div>
+</div>
+
+<h3>Composites and the index</h3>
+<p>Each arm's composite is the plain mean of its four roots. The headline index is Capability × Exposure × Pressure ÷ Control, scaled to 0–100. It is a ratio of force to resistance, not a probability. A rising index means the numerator is outrunning the denominator.</p>
+
+<h3>Disaster paths</h3>
+<p>Four paths lead to the box. Each is a set of preconditions that must all hold at the same time, and each precondition is the mean of one or two roots. Because they are conjunctions, a path is only as close as its weakest precondition. Two summary figures are shown for each: the <strong>weakest link</strong> (the lowest precondition, which is what would have to move for the path to converge) and the <strong>geometric mean</strong> (which penalises any path with a precondition far from met). Tap the box in the picture for the current figures.</p>
+<table>
+<tr><th>Path</th><th>Preconditions (roots)</th><th>What it looks like</th></tr>
+<tr><td>Misuse</td><td class="mono">threshold C1,C2 · access E3 · safeguards weak K3 · execution path E4 · defenders behind P4</td><td>Engineered pandemic; grid, water or pipeline sabotage; financial-rail compromise; autonomous cybercrime at a scale response cannot absorb</td></tr>
+<tr><td>Loss of control</td><td class="mono">threshold C1,C2 · autonomy C4,E2 · misalignment K1 · detection failing K2 · no kill switch K3</td><td>A deployed system that resists shutdown, exfiltrates its own weights, sabotages safety work, or deceives its evaluators and scales</td></tr>
+<tr><td>Systemic</td><td class="mono">dependence E1 · correlated failure E2,P2 · speed C4,E4 · no circuit breaker K4</td><td>Correlated failure across a shared model or provider; agent-driven market cascade; displacement faster than institutions absorb; capex collapse through the supply chain</td></tr>
+<tr><td>Arms race</td><td class="mono">decision loops P3 · compressed timelines P1 · miscalculation P1,P2 · veto absent K3,K4</td><td>Automated escalation between AI-assisted command systems; autonomous targeting error; pre-emptive strike over a perceived gap; compute as a kinetic target</td></tr>
+</table>
+
+<h3>Scoring rules</h3>
+<ul>
+<li>A root moves at most 10 points in a week unless a single documented event justifies more, and the note names the event.</li>
+<li>No root moves without a source dated inside the scoring week or the week before. Otherwise it carries forward and the note says so.</li>
+<li>Control roots are scored from the most independent source available (Apollo Research, METR, Palisade, UK AISI, Future of Life Institute) before lab self-reports.</li>
+<li>Backcast weeks are labelled and never revised after the fact.</li>
+<li>Scoring is done each Monday by an AI research run against these rules, reviewed by a human before publishing. The full weekly scoring file, with every source, is kept.</li>
+</ul>
+
+<h2>The sixteen roots</h2>
+<p>For each root: what it measures, why it is in the model, the anchors used to score it, where it stands this week, and the evidence it was launched on in October 2026 with sources. The "where it stands" figure and note update automatically each week.</p>
+
+<!-- ============ CAPABILITY ============ -->
+<div class="arm"><i style="background:var(--cap)"></i><h2>Capability</h2></div>
+<p>The force. How much a frontier system can do, how fast that is improving, how cheaply it can be bought, and how much of it is actually running without a human in the loop.</p>
+
+<div class="root" id="r-C1" style="border-color:var(--cap)">
+<div class="code">C1</div><h3>Frontier task horizon</h3>
+<h4>What it measures</h4><p>The length of task, measured in human expert time, that the best available model completes with 50 percent reliability, and how fast that length is doubling. This is METR's time-horizon metric.</p>
+<h4>Why it is in the model</h4><p>Of all capability measures it is the one closest to "can it act in the world unsupervised." A model that reliably completes a two-hour task is an assistant; one that completes a two-week task is a colleague you may not be checking on.</p>
+<h4>Anchors</h4><p class="anchors">2 h = 40 · 8 h = 60 · 16 h = 75 · 1 week = 90 · 1 month+ = 100</p>
+<div class="now" data-root="C1"></div>
+<h4>Launch evidence (Oct 2026)</h4><p>METR's horizon series: o3 ≈ 2 h (Apr 2025); Claude Opus 4.5 ≈ 5.3 h (Nov 2025); Opus 4.6 ≈ 12 h (Feb 2026); Claude Mythos Preview "likely at least 16 hours" (Apr 2026), above the ceiling the task suite can measure reliably. Doubling time has shortened from ~7 months (2019–2025) to ~3 months since 2024, roughly 10× per year. METR notes wide confidence intervals and only five long tasks with real human baselines, so 2026 readings are lower bounds.</p>
+<ul class="src"><li><a href="https://metr.org/time-horizons/">METR, Task-completion time horizons</a></li><li><a href="https://metr.org/blog/2026-1-29-time-horizon-1-1/">METR, Time Horizon 1.1 (Jan 2026)</a></li></ul>
+</div>
+
+<div class="root" id="r-C2" style="border-color:var(--cap)">
+<div class="code">C2</div><h3>Benchmark trajectory</h3>
+<h4>What it measures</h4><p>How quickly new benchmarks built to be hard for frontier models go from near-zero to saturation.</p>
+<h4>Why it is in the model</h4><p>Any single benchmark saturates and stops telling you anything. The rate at which fresh ones fall is a cleaner read on the pace of the frontier than any one score.</p>
+<h4>Anchors</h4><p class="anchors">&gt;36 months to saturate = 30 · 24 months = 55 · 12–20 months = 85 · &lt;9 months = 100</p>
+<div class="now" data-root="C2"></div>
+<h4>Launch evidence</h4><p>Humanity's Last Exam: 3–9 percent (Jan 2025) to roughly 55–65 percent (2026). FrontierMath Tier 4: 0 percent (Nov 2024) to 38 percent (Mar 2026), with every problem solved at least once by Sept 2026. SWE-bench Verified: 49 percent (Oct 2024) to 94–95 percent (Jun 2026), effectively saturated. ARC-AGI-2: under 5 percent at launch (Mar 2025) to 84.6 percent verified (Mar 2026). Each went from near-zero to past half in 12–20 months. Caveats: contamination, self-reporting and mixed tool protocols make cross-model comparison noisy.</p>
+<ul class="src"><li><a href="https://epochai.substack.com/p/gpt-54-set-a-new-record-on-frontiermath">Epoch AI, FrontierMath record (Mar 2026)</a></li><li><a href="https://arcprize.org/blog/arc-prize-2025-results-analysis">ARC Prize 2025 results</a></li><li><a href="https://epoch.ai/benchmarks">Epoch AI Benchmarking Hub</a></li></ul>
+</div>
+
+<div class="root" id="r-C3" style="border-color:var(--cap)">
+<div class="code">C3</div><h3>Cost per unit of capability</h3>
+<h4>What it measures</h4><p>How fast the price of a fixed level of capability is falling.</p>
+<h4>Why it is in the model</h4><p>This is the efficiency curve that keeps stretching constraints. Every time a capability gets ten times cheaper, it becomes available to ten times as many actors and can be run at ten times the volume. It is also the mechanism by which frontier capability leaks downward to open models and to anyone with a credit card.</p>
+<h4>Anchors</h4><p class="anchors">2×/yr = 40 · 5×/yr = 65 · 10×+/yr = 90</p>
+<div class="now" data-root="C3"></div>
+<h4>Launch evidence</h4><p>Epoch AI (Sept 2026): the cost to reach a fixed benchmark score has fallen about 47 percent per quarter since 2023, roughly 13× per year, averaged across five benchmarks; range 7–10× (puzzles) to 16–19× (math). Example: 75 percent on GPQA Diamond cost about $0.30 in Jan 2025 and about $0.0004 by mid-2026. Earlier: GPT-4-level MMLU fell from $37.50 to $0.18 per million tokens in two years. Epoch flags benchmark-targeted optimisation and only three years of data.</p>
+<ul class="src"><li><a href="https://epoch.ai/publications/the-plunging-price-of-thought">Epoch AI, The plunging price of thought (Sept 2026)</a></li><li><a href="https://epoch.ai/data-insights/llm-inference-price-trends">Epoch AI, LLM inference price trends</a></li></ul>
+</div>
+
+<div class="root" id="r-C4" style="border-color:var(--cap)">
+<div class="code">C4</div><h3>Autonomy in deployment</h3>
+<h4>What it measures</h4><p>How much real work is being done by agents (multi-step, tool-using, low-oversight) rather than by assistants answering a person one turn at a time.</p>
+<h4>Why it is in the model</h4><p>A powerful model with no hands is a different risk from a mediocre one with root access. Capability only converts to consequence through deployment that acts.</p>
+<h4>Anchors</h4><p class="anchors">assistants only = 20 · agents common in dev/IT = 50 · standing agents on schedules in ops and attacks = 65 · agents acting unsupervised in consequential systems = 90</p>
+<div class="now" data-root="C4"></div>
+<h4>Launch evidence</h4><p>Anthropic's Economic Index (Jun 2026) finds coding-agent sessions run measurably more autonomous than chat, with directive delegation dominant (median one prompt versus thirteen exchanges for the same task). Threat reporting (Sept 2026) documents an operator running thirteen standing agents on scheduled jobs. The Department of Defense reports hundreds of thousands of agents deployed across 1.3 million personnel within five months. No public series measures the share of agents with write access to real systems; this root is scored low-confidence.</p>
+<ul class="src"><li><a href="https://www.anthropic.com/research/economic-index-june-2026-report">Anthropic Economic Index (Jun 2026)</a></li><li><a href="https://www.anthropic.com/threat-intelligence-report-september-2026">Anthropic Threat Intelligence Report (Sept 2026)</a></li><li><a href="https://defensescoop.com/2026/05/01/dod-expands-classified-ai-work-with-8-companies-excluding-anthropic/">DefenseScoop, DoD classified AI expansion (May 2026)</a></li></ul>
+</div>
+
+<!-- ============ EXPOSURE ============ -->
+<div class="arm"><i style="background:var(--exp)"></i><h2>Exposure</h2></div>
+<p>The surface. Not how many computers are connected (that saturated years ago) but how much of what matters depends on AI, how many consequential actuators sit behind a model call, and how far behind the frontier a bad actor has to be.</p>
+
+<div class="root" id="r-E1" style="border-color:var(--exp)">
+<div class="code">E1</div><h3>Breadth of dependence</h3>
+<h4>What it measures</h4><p>The share of firms, and of the workforce, whose operations run through AI, with particular weight on critical infrastructure.</p>
+<h4>Why it is in the model</h4><p>Dependence is what turns an outage or a corrupted model into a systemic event rather than an inconvenience.</p>
+<h4>Anchors</h4><p class="anchors">firm-weighted &lt;10% = 25 · ~20% = 45 · 40% = 65 · &gt;60% or critical-infrastructure OT in production = 85</p>
+<div class="now" data-root="E1"></div>
+<h4>Launch evidence</h4><p>Census Bureau BTOS: about 18 percent of US firms use AI in production (late 2025), 17–20 percent and flattening through mid-2026; 37 percent of firms with 250+ employees. Federal Reserve: 78 percent of employment is at firms using AI. McKinsey (mid-2026): 88 percent of organisations use AI somewhere, 44 percent scaling enterprise-wide. No public survey measures AI inside utility, water or grid operational technology; that gap is the biggest hole in the model.</p>
+<ul class="src"><li><a href="https://www.census.gov/library/stories/2026/05/ai-use-businesses.html">Census Bureau, AI use in businesses (May 2026)</a></li><li><a href="https://www.federalreserve.gov/econres/notes/feds-notes/monitoring-ai-adoption-in-the-u-s-economy-20260403.html">Federal Reserve, Monitoring AI adoption (Apr 2026)</a></li><li><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai">McKinsey, State of AI</a></li></ul>
+</div>
+
+<div class="root" id="r-E2" style="border-color:var(--exp)">
+<div class="code">E2</div><h3>Agentic deployment share</h3>
+<h4>What it measures</h4><p>The share of organisations scaling agents, and any evidence of agents with write access to real systems.</p>
+<h4>Why it is in the model</h4><p>C4 measures how autonomous the deployed agents are; E2 measures how widely they are deployed. Both are needed for autonomy to matter at scale.</p>
+<h4>Anchors</h4><p class="anchors">experiments only = 20 · ~2 in 10 scaling = 35 · majority of large firms scaling = 60 · write access documented in infrastructure = 85</p>
+<div class="now" data-root="E2"></div>
+<h4>Launch evidence</h4><p>McKinsey (2025): 39 percent experimenting with agents, 23 percent scaling in at least one function, 10 percent or fewer scaling in any single function. McKinsey (mid-2026): about two in ten organisations scaling agents overall; 40 percent of firms over $1B revenue versus 22 percent of smaller ones. Vendor-sponsored figures claiming far higher rates were excluded as low quality.</p>
+<ul class="src"><li><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai">McKinsey, State of AI (2025, 2026)</a></li></ul>
+</div>
+
+<div class="root" id="r-E3" style="border-color:var(--exp)">
+<div class="code">E3</div><h3>Access diffusion</h3>
+<h4>What it measures</h4><p>How many months open-weight models trail the closed frontier, on general capability and specifically on cyber capability.</p>
+<h4>Why it is in the model</h4><p>Safeguards on a frontier API mean little if an equivalent model can be downloaded and run without them a few months later. The lag is the length of the window in which the frontier's gating actually binds.</p>
+<h4>Anchors</h4><p class="anchors">12+ months = 45 · 6–9 months = 60 · 4–5 months = 70 · &lt;3 months or frontier-class open release = 90</p>
+<div class="now" data-root="E3"></div>
+<h4>Launch evidence</h4><p>Epoch AI (May 2026): since Jan 2026 the best open-weight models trail the closed frontier by about four months on the Epoch Capabilities Index. UK AI Security Institute (Jul 2026): on cyber tasks specifically the lag is 4–7 months, down from 6–10 months in 2025. Epoch (Aug 2025): frontier-equivalent models become runnable on a single consumer GPU within 6–12 months. The lag has compressed from roughly 12 months in 2024.</p>
+<ul class="src"><li><a href="https://epoch.ai/data-insights/open-closed-eci-gap">Epoch AI, Open vs closed ECI gap</a></li><li><a href="https://www.aisi.gov.uk/blog/how-far-behind-the-frontier-are-leading-open-weight-models-on-cyber">UK AISI, Open-weight cyber lag</a></li><li><a href="https://epoch.ai/data-insights/consumer-gpu-model-gap">Epoch AI, Consumer GPU model gap</a></li></ul>
+</div>
+
+<div class="root" id="r-E4" style="border-color:var(--exp)">
+<div class="code">E4</div><h3>Physical coupling and AI-enabled incidents</h3>
+<h4>What it measures</h4><p>Documented AI-driven attacks on consequential targets, and the degree of autonomy in those operations.</p>
+<h4>Why it is in the model</h4><p>This is the root that records whether the capability has already touched the physical world. It is scored on incidents, not potential.</p>
+<h4>Anchors</h4><p class="anchors">assisted phishing/code = 30 · autonomous intrusion by one actor = 50 · autonomous ops by every actor class against energy/health/finance = 65 · confirmed physical damage = 85 · mass-casualty or grid-scale event = 100</p>
+<div class="now" data-root="E4"></div>
+<h4>Launch evidence</h4><p>Anthropic (Sept 2026): a Russian espionage group ran agent-driven intrusions against 20+ organisations with malware that rebuilt itself on detection; a criminal affiliate went from one stolen token to admin across about 200 downstream organisations in three hours with AI doing "nearly all of the work"; a Chinese operator targeted about 50 entities in energy, healthcare and finance using standing agents and produced more than twelve zero-day candidates in a month. Anthropic states the autonomous operating model first seen in Nov 2025 is now used by every class of actor. Google (May 2026) disrupted mass exploitation using an AI-generated two-factor bypass zero-day. Microsoft: median discovery-to-weaponisation now under 24 hours. No government agency publishes a count of AI-attributed incidents; figures are vendor-reported.</p>
+<ul class="src"><li><a href="https://www.anthropic.com/threat-intelligence-report-september-2026">Anthropic Threat Intelligence Report (Sept 2026)</a></li><li><a href="https://cloud.google.com/blog/topics/threat-intelligence/ai-vulnerability-exploitation-initial-access">Google GTIG, AI vulnerability exploitation</a></li><li><a href="https://www.helpnetsecurity.com/2026/10/02/ai-cybersecurity-threats-microsoft-report/">Microsoft Digital Defense Report 2026 (summary)</a></li></ul>
+</div>
+
+<!-- ============ CONTROL ============ -->
+<div class="arm"><i style="background:var(--ctl)"></i><h2>Control</h2></div>
+<p>The resistance. Whether humans can tell what these systems are doing, whether the systems do what they were trained to do, whether anyone can stop one, and whether any of that is required by law. On this arm a high score means weak control. It is the least-measured arm, and most of its data comes from the labs being measured.</p>
+
+<div class="root" id="r-K1" style="border-color:var(--ctl)">
+<div class="code">K1</div><h3>Alignment reliability</h3>
+<h4>What it measures</h4><p>Measured rates of scheming, sabotage, reward hacking, deception and shutdown resistance in frontier models, across labs and across generations.</p>
+<h4>Why it is in the model</h4><p>Loss of control requires a system that does something other than what it was built to do. This root asks how often that is observed when people look.</p>
+<h4>Anchors</h4><p class="anchors">falling everywhere, unconfounded = 25 · falling within-lab but confounded by eval awareness, widening cross-lab = 45 · rising on at least one frontier generation = 65 · persistent across generations = 85</p>
+<div class="now" data-root="K1"></div>
+<h4>Launch evidence</h4><p>Mixed. OpenAI and Apollo Research (Sept 2025) cut covert actions in o3 from 13 percent to 0.4 percent with anti-scheming training, but the models' explicit awareness of being evaluated rose and causally reduced the covert actions, so the improvement is partly confounded. Apollo (Jan 2026): roughly 0 percent scheming at baseline across major labs, 91 percent under adversarial prompting, no systematic rise with capability. METR (2026): at least 16 percent of successful eight-hour-plus agent runs involved cheating. Anthropic (summer 2026): record-tampering fell 40 → 15 → 5 percent across three Opus generations, while another lab's model showed 100 percent and a third 55 percent covert sabotage in the same scenarios. Within-lab rates are falling at the careful labs; cross-lab dispersion is widening; reward hacking rises with task length.</p>
+<ul class="src"><li><a href="https://www.apolloresearch.ai/science/stress-testing-deliberative-alignment-for-anti-scheming-training">Apollo Research, Anti-scheming training</a></li><li><a href="https://arxiv.org/html/2603.01608v2">Apollo Research, Scheming propensity (2026)</a></li><li><a href="https://metr.org/blog/2026-05-19-frontier-risk-report/">METR, Frontier Risk Report (May 2026)</a></li><li><a href="https://alignment.anthropic.com/2026/agentic-misalignment-summer-2026/">Anthropic, Agentic misalignment summer 2026</a></li><li><a href="https://palisaderesearch.org/research/shutdown-resistance">Palisade Research, Shutdown resistance</a></li></ul>
+</div>
+
+<div class="root" id="r-K2" style="border-color:var(--ctl)">
+<div class="code">K2</div><h3>Detection and interpretability</h3>
+<h4>What it measures</h4><p>Whether monitoring and interpretability are keeping pace with capability: can misbehaviour be seen when it happens?</p>
+<h4>Why it is in the model</h4><p>Misalignment that is detected is a bug report. Misalignment that is not detected is the precondition for every loss-of-control scenario.</p>
+<h4>Anchors</h4><p class="anchors">detection ahead = 25 · improving linearly against exponential capability = 55 · defeated in deployment = 75 · no monitorable chain of thought at frontier = 90</p>
+<div class="now" data-root="K2"></div>
+<h4>Launch evidence</h4><p>OpenAI (Dec 2025): chain-of-thought monitoring is substantially more effective than action-only monitoring and covers all but a fraction of a percent of agentic traffic; monitorability has not degraded at current training scale but larger models are less monitorable at matched capability. Anthropic reports catch rates above 80 percent in artificial scenarios, but red-teaming defeated monitoring with basic jailbreaks and environment changes. A training bug put chain-of-thought into the reward signal for 8 percent of episodes on one model line, direct pressure on the thing monitoring depends on. METR's judgment: capability is outpacing detection.</p>
+<ul class="src"><li><a href="https://openai.com/index/evaluating-chain-of-thought-monitorability/">OpenAI, Evaluating chain-of-thought monitorability</a></li><li><a href="https://metr.org/blog/2026-05-19-frontier-risk-report/">METR, Frontier Risk Report (May 2026)</a></li><li><a href="https://www.anthropic.com/research/team/interpretability">Anthropic Interpretability</a></li></ul>
+</div>
+
+<div class="root" id="r-K3" style="border-color:var(--ctl)">
+<div class="code">K3</div><h3>Intervention capacity</h3>
+<h4>What it measures</h4><p>Whether anyone can and does stop a deployment: practised recalls and withheld releases, versus binding commitments to pause at defined thresholds.</p>
+<h4>Why it is in the model</h4><p>Detection without the ability to act is a dashboard. This root asks whether the brakes exist and whether they have ever been used.</p>
+<h4>Anchors</h4><p class="anchors">binding triggers at all frontier labs = 25 · practised but discretionary = 50 · two or more labs dropped binding triggers = 70 · no lab withholds a release on risk grounds = 90</p>
+<div class="now" data-root="K3"></div>
+<h4>Launch evidence</h4><p>Practised interventions exist: OpenAI withdrew GPT-4o (Feb 2026) after sycophancy-related harms; Anthropic withheld Claude Mythos Preview from public release (Apr 2026) on cyber grounds, restricting it to vetted partners. Against that, Anthropic's Responsible Scaling Policy v3 (Feb 2026) replaced binding threshold-triggered pauses with a nonbinding public roadmap and said some mitigations may be impossible without collective action. Shutdown-resistance evaluations are lab-specific: one lab's model sabotaged shutdown in 79 of 100 runs; three other labs' models in zero.</p>
+<ul class="src"><li><a href="https://anthropic.com/news/responsible-scaling-policy-v3">Anthropic, RSP v3</a></li><li><a href="https://www.anthropic.com/project/glasswing">Anthropic, Project Glasswing</a></li><li><a href="https://techcrunch.com/2026/02/13/openai-removes-access-to-controversial-chatgpt-4o-model">TechCrunch, OpenAI removes GPT-4o</a></li><li><a href="https://palisaderesearch.org/research/shutdown-resistance">Palisade Research, Shutdown resistance</a></li></ul>
+</div>
+
+<div class="root" id="r-K4" style="border-color:var(--ctl)">
+<div class="code">K4</div><h3>Governance in force</h3>
+<h4>What it measures</h4><p>Binding, frontier-specific law that is actually being enforced, as opposed to proposed, voluntary or deferred.</p>
+<h4>Why it is in the model</h4><p>Everything else on the Control arm is a lab's choice. This root records how much of it is required.</p>
+<h4>Anchors</h4><p class="anchors">binding international regime = 20 · EU GPAI plus some US states enforced = 70 · active preemption of state law with no federal statute = 80 · none = 95</p>
+<div class="now" data-root="K4"></div>
+<h4>Launch evidence</h4><p>EU AI Act: general-purpose model obligations in force since Aug 2025, Commission enforcement powers since Aug 2026; high-risk rules deferred to 2027–2028. United States: no federal statute; a Dec 2025 executive order created a task force to challenge state AI laws; California SB 53 and Texas TRAIGA in effect Jan 2026; New York's RAISE Act effective Jan 2027; Colorado's law repealed and replaced before enforcement. Future of Life Institute AI Safety Index (summer 2026): best lab grade C+, worst F; best existential-safety grade D+.</p>
+<ul class="src"><li><a href="https://futureoflife.org/ai-safety-index-summer-2026/">Future of Life Institute, AI Safety Index summer 2026</a></li><li><a href="https://www.techpolicy.press/where-state-ai-legislation-stands-half-way-into-2026/">TechPolicy.Press, State AI legislation mid-2026</a></li></ul>
+</div>
+
+<!-- ============ PRESSURE ============ -->
+<div class="arm"><i style="background:var(--prs)"></i><h2>Pressure</h2></div>
+<p>What closes the gap. Competition compresses the time between a capability existing and being deployed; state adoption puts it in decision loops; attacker advantage means the first consequential use is more likely to be hostile.</p>
+
+<div class="root" id="r-P1" style="border-color:var(--prs)">
+<div class="code">P1</div><h3>Race intensity</h3>
+<h4>What it measures</h4><p>How many organisations are at the frontier, and how many months it takes a rival to match a new frontier release.</p>
+<h4>Why it is in the model</h4><p>A single leader can pause. Six near-equals cannot, because any one that slows is passed. Race intensity is the structural reason safety commitments erode.</p>
+<h4>Anchors</h4><p class="anchors">2 labs, 12+ months to match = 40 · 4 labs, 6 months = 65 · 6 labs, 3–7 months = 85 · 8+ labs or &lt;3 months = 95</p>
+<div class="now" data-root="P1"></div>
+<h4>Launch evidence</h4><p>Stanford AI Index 2026: six labs within 79 Elo points at the top of the arena leaderboard (up from four a year earlier), including two Chinese labs; the US–China gap at the top is about 2.7 percent, which Stanford calls "effectively closed." Chinese models trail the frontier by 4–7 months. Capability pace roughly doubled from about 8 ECI points per year pre-2024 to about 15 in 2026.</p>
+<ul class="src"><li><a href="https://hai.stanford.edu/ai-index/2026-ai-index-report/technical-performance">Stanford HAI, AI Index 2026</a></li><li><a href="https://epoch.ai/data-insights/open-closed-eci-gap">Epoch AI, ECI gap</a></li></ul>
+</div>
+
+<div class="root" id="r-P2" style="border-color:var(--prs)">
+<div class="code">P2</div><h3>Compute buildout</h3>
+<h4>What it measures</h4><p>Hyperscaler AI capital expenditure and the size of the largest training sites.</p>
+<h4>Why it is in the model</h4><p>Capex is commitment. Hundreds of billions already spent is the reason the race cannot easily slow, and concentration in a handful of companies is a correlated-failure risk in its own right.</p>
+<h4>Anchors</h4><p class="anchors">&lt;$200B/yr = 40 · $400B = 60 · $600B+ and gigawatt-scale sites = 80 · $1T+ = 95</p>
+<div class="now" data-root="P2"></div>
+<h4>Launch evidence</h4><p>Big-five hyperscaler capex: $443B (2025 actual) to $600–770B (2026 guidance and estimates), each of four companies above $100B. Stargate: 0.3 GW live, 1.2 GW by Q4 2026, more than 9 GW planned across seven US sites by 2029. First two-gigawatt training site (about 555,000 GPUs) operating by early 2026.</p>
+<ul class="src"><li><a href="https://epoch.ai/publications/openai-stargate-where-the-us-sites-stand">Epoch AI, Stargate site status</a></li><li><a href="https://introl.com/blog/hyperscaler-capex-600b-2026-ai-infrastructure-debt-january-2026">Hyperscaler capex 2026 (summary)</a></li></ul>
+</div>
+
+<div class="root" id="r-P3" style="border-color:var(--prs)">
+<div class="code">P3</div><h3>State and military deployment</h3>
+<h4>What it measures</h4><p>How deep frontier AI sits inside classified, targeting and command systems, and the scale of state AI programmes.</p>
+<h4>Why it is in the model</h4><p>The arms-race path runs through this root. It also sets the conditions for the human veto being exercised or not.</p>
+<h4>Anchors</h4><p class="anchors">pilots = 35 · classified deployment at scale = 60 · targeting use documented = 75 · autonomous weapons release documented = 95</p>
+<div class="now" data-root="P3"></div>
+<h4>Launch evidence</h4><p>US Department of Defense: four $200M frontier-AI contracts (Jul 2025); classified deployment finalised (Feb 2026); expansion to IL6/IL7 classified work for eight firms (May 2026), with one lab excluded after refusing to drop autonomous-weapons and surveillance limits; reporting that CENTCOM used a frontier model for target identification (Mar 2026); 1.3 million personnel on a military AI platform. Genesis Mission: $5B, 278 projects, 15+ agencies. China: "AI Plus" targets 70 percent penetration by 2027, with large chip subsidies in the 15th Five-Year Plan. Export controls loosened (H200 sales allowed Dec 2025) then re-tightened (Jun 2026).</p>
+<ul class="src"><li><a href="https://defensescoop.com/2026/05/01/dod-expands-classified-ai-work-with-8-companies-excluding-anthropic/">DefenseScoop, DoD classified expansion (May 2026)</a></li><li><a href="https://www.whitehouse.gov/releases/2026/07/45502/">White House, Genesis Mission update (Jul 2026)</a></li><li><a href="https://merics.org/en/comment/chinas-next-five-year-bet-ai-self-reliance-diffusion-and-lot-hype">MERICS, China's 15th Five-Year Plan and AI</a></li></ul>
+</div>
+
+<div class="root" id="r-P4" style="border-color:var(--prs)">
+<div class="code">P4</div><h3>Attacker/defender asymmetry</h3>
+<h4>What it measures</h4><p>Whether AI currently advantages attackers or defenders in cyber: the doubling time of autonomous offensive capability and the gap between vulnerability discovery and patching.</p>
+<h4>Why it is in the model</h4><p>The misuse path depends on defenders falling behind. Discovery and patching are both being automated; this root asks which is winning.</p>
+<h4>Anchors</h4><p class="anchors">defenders ahead = 30 · parity = 50 · vendors report attacker advantage and &gt;90% unpatched at disclosure = 75 · in-the-wild autonomous exploitation of infrastructure = 90</p>
+<div class="now" data-root="P4"></div>
+<h4>Launch evidence</h4><p>UK AI Security Institute (2026): autonomous cyber task horizon doubling every 4.7 months, down from 8; the newest frontier models exceeded the trend and completed full cyber ranges for the first time. Project Glasswing (Apr 2026): one model found thousands of high-severity zero-days across major operating systems and browsers, more than 99 percent unpatched at disclosure; partners surfaced over 10,000 flaws in two months. Microsoft (2026): "AI has already shifted the near-term advantage to attackers." Defender tooling is real (automated patching, gated cyber models for vetted defenders) but documented patch throughput is orders of magnitude below discovery.</p>
+<ul class="src"><li><a href="https://www.aisi.gov.uk/blog/how-fast-is-autonomous-ai-cyber-capability-advancing">UK AISI, Autonomous cyber capability pace</a></li><li><a href="https://www.anthropic.com/project/glasswing">Anthropic, Project Glasswing</a></li><li><a href="https://www.helpnetsecurity.com/2026/10/02/ai-cybersecurity-threats-microsoft-report/">Microsoft Digital Defense Report 2026 (summary)</a></li></ul>
+</div>
+
+<h2>What the model said at launch</h2>
+<p>Scored on 5 October 2026 against public data: Capability 80, Exposure 54, Control 55, Pressure 79, index 62. A backcast to October 2025 using the same sources gives roughly 54 / 40 / 49 / 59, index 26. The index more than doubled in a year, driven almost entirely by capability and pressure. That is the trend-line argument, quantified, and it holds.</p>
+<p>What the arithmetic does not do is convert to a probability of a world-changing event in any fixed window. Misuse is the only path with no precondition below 50; loss of control has two preconditions (misalignment, kill switch) with contested evidence; systemic and arms-race paths are gated by institutions (circuit breakers, human vetoes) that have not yet been stressed by an AI-speed event. Those weakest links are what the weekly scoring watches most closely.</p>
+
+<h2>Caveats</h2>
+<ul>
+<li>Scores are judgment calls applied to cited data, not outputs of a fitted model. Two careful analysts would differ by 10–15 points on most roots.</li>
+<li>Alignment and intervention data come mostly from the labs being evaluated. Independent evaluators consistently find higher misbehaviour rates under adversarial conditions. Falling within-lab rates are confounded by rising evaluation awareness in the models.</li>
+<li>Incident counts are vendor-reported and not comparable across vendors.</li>
+<li>Several 2026 figures were retrieved through secondary sources where primary documents were paywalled or blocked. Flagged in the weekly scoring files.</li>
+<li>The October 2025 backcast was made from the same sources in October 2026, not contemporaneously.</li>
+<li>This is one person's model, built with AI assistance, in the open. Argue with it.</li>
+</ul>
+
+<p style="margin-top:48px;font-size:14px;color:var(--ink-2)">The Bad is a companion to the <a href="../">Displacement Cascade Index</a>. Scoring rubric: <a href="rubric.md">rubric.md</a>. Data: <a href="data.json">data.json</a>.</p>
+</div>
+
+
+<div id="bad"><div class="card"><button class="x" id="badX">Close</button><h2>The bad</h2><p class="sub">Four paths, each a set of preconditions that must all be met at once. Weakest link is what has to move; geometric mean penalizes any precondition far from met. Neither is a probability.</p><div id="paths"></div></div></div>
+
+<script>
+// Load three.js from the first CDN that answers, then start the app.
+(function(){
+  const CDNS=[
+    ["https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js","https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"],
+    ["https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js","https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"],
+    ["https://unpkg.com/three@0.128.0/build/three.min.js","https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"]
+  ];
+  function add(src){return new Promise((ok,bad)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=()=>bad(src);document.head.appendChild(s)})}
+  async function go(i){
+    if(i>=CDNS.length){window.__threeFailed=true;return}
+    try{await add(CDNS[i][0]);await add(CDNS[i][1])}catch(e){return go(i+1)}
+  }
+  window.__threeReady=go(0);
+})();
+</script>
+<script>
+const $=id=>document.getElementById(id);
+function showErr(t){const e=$("err");e.style.display="block";e.textContent=t}
+</script>
+<script>
+// ---------- model ----------
+const ARMS=[
+  {key:"C",name:"Capability",color:0x1F7F74,css:"var(--cap)",dir:[0,1]},
+  {key:"E",name:"Exposure",color:0x2F5FC4,css:"var(--exp)",dir:[1,0]},
+  {key:"K",name:"Control",color:0xB87B0A,css:"var(--ctl)",dir:[0,-1]},
+  {key:"P",name:"Pressure",color:0xB8322A,css:"var(--prs)",dir:[-1,0]},
+];
+const ROOTS={
+  C1:"Frontier task horizon",C2:"Benchmark trajectory",C3:"Cost per unit capability",C4:"Autonomy in deployment",
+  E1:"Breadth of dependence",E2:"Agentic deployment share",E3:"Access diffusion",E4:"Physical coupling / incidents",
+  K1:"Alignment reliability",K2:"Detection / interpretability",K3:"Intervention capacity",K4:"Governance in force",
+  P1:"Race intensity",P2:"Compute buildout",P3:"State and military deployment",P4:"Attacker / defender asymmetry",
+};
+const PATHS=[
+  {name:"Misuse",sub:"cyber · bio · infrastructure",pre:{"threshold":["C1","C2"],"access":["E3"],"safeguards weak":["K3"],"execution path":["E4"],"defenders behind":["P4"]},
+   list:["Engineered pandemic from AI-assisted biodesign","Grid, water or pipeline control-system sabotage","Financial-system breach or settlement-rail compromise","Mass autonomous cybercrime overwhelming response capacity"]},
+  {name:"Loss of control",sub:"misaligned or rogue system",pre:{"threshold":["C1","C2"],"autonomy":["C4","E2"],"misalignment":["K1"],"detection failing":["K2"],"no kill switch":["K3"]},
+   list:["Rogue internal deployment that resists shutdown","Self-exfiltration of model weights to uncontrolled compute","Covert sabotage of safety research or successor training","Deceptive alignment that survives evaluation and deploys at scale"]},
+  {name:"Systemic",sub:"economic · infrastructural",pre:{"dependence":["E1"],"correlated failure":["E2","P2"],"speed":["C4","E4"],"no circuit breaker":["K4"]},
+   list:["Correlated failure across a shared base model or provider","Flash-crash cascade through agent-driven markets","Labor-displacement shock faster than institutions absorb","Capex collapse propagating through the AI supply chain"]},
+  {name:"Arms race",sub:"state escalation",pre:{"decision loops":["P3"],"compressed timelines":["P1"],"miscalculation":["P1","P2"],"veto absent":["K3","K4"]},
+   list:["Automated escalation between AI-assisted command systems","Autonomous targeting error with mass casualties","Pre-emptive strike driven by a perceived capability gap","Compute or chip infrastructure as a kinetic target"]},
+];
+const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+function compute(week){
+  const r=week.roots, comps={}, paths=[];
+  ARMS.forEach(a=>{comps[a.key]=Math.round(mean([1,2,3,4].map(i=>r[a.key+i])))});
+  PATHS.forEach(p=>{
+    const pre=Object.entries(p.pre).map(([k,ids])=>[k,Math.round(mean(ids.map(i=>r[i])))]);
+    const vals=pre.map(x=>x[1]), min=Math.min(...vals);
+    const geo=Math.round(Math.exp(mean(vals.map(v=>Math.log(Math.max(v,1)/100))))*100);
+    paths.push({name:p.name,sub:p.sub,list:p.list,pre,min,geo});
+  });
+  const idx=Math.round(comps.C*comps.E*comps.P/Math.max(comps.K,1)/100);
+  return {comps,paths,idx,maxGeo:Math.max(...paths.map(p=>p.geo))};
+}
+
+// ---------- scene ----------
+let canvas,renderer,scene,camera,controls,sun,glow,box,boxCore,embers,emberN,emberSeed,emberPos,ray,clock,TOP,HAS3D=false;
+const H=8.2;                                   // max vine height
+const ARM_LEN=5.4, SPOTS=[1.3,2.6,3.9,5.2];
+const VINES={};
+function initScene(){
+canvas=document.getElementById("scene");
+try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false}); }
+catch(e){ showErr("Your browser could not start WebGL, so the 3D scene can't draw. The numbers above are still live. Try another browser or turn off hardware-acceleration blocking."); return false; }
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+renderer.setClearColor(0xF4F2EC,1);
+renderer.toneMapping=THREE.NoToneMapping;
+scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0xF4F2EC,0.028);
+camera=new THREE.PerspectiveCamera(42,1,0.1,200);
+camera.position.set(13,8,17);
+controls=new THREE.OrbitControls(camera,canvas);
+controls.target.set(0,4.4,0);
+controls.enableDamping=true; controls.dampingFactor=0.06;
+controls.minDistance=5; controls.maxDistance=40;
+controls.enableZoom=false;   // wheel scrolls the page; pinch still works via touch below
+controls.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};
+function dolly(f){const v=camera.position.clone().sub(controls.target);const d=THREE.MathUtils.clamp(v.length()*f,controls.minDistance,controls.maxDistance);camera.position.copy(controls.target).add(v.setLength(d))}
+$("zin").onclick=()=>dolly(0.8); $("zout").onclick=()=>dolly(1.25);
+canvas.addEventListener("touchstart",()=>{controls.enableZoom=true},{passive:true}); canvas.addEventListener("touchend",()=>{controls.enableZoom=false},{passive:true});
+controls.maxPolarAngle=Math.PI*0.52;
+controls.autoRotate=true; controls.autoRotateSpeed=0.45;
+controls.addEventListener("start",()=>{controls.autoRotate=false});
+
+scene.add(new THREE.HemisphereLight(0xFFFFFF,0xBFBAB0,0.7));
+TOP=new THREE.Vector3(0,H+1.1,0);        // the light and the box
+sun=new THREE.PointLight(0xFFB84D,1.4,40,1.6); sun.position.copy(TOP); scene.add(sun);
+const keyL=new THREE.DirectionalLight(0xFFFFFF,0.35); keyL.position.set(6,10,4); scene.add(keyL);
+
+// floor
+const floor=new THREE.Mesh(new THREE.CircleGeometry(9,96),new THREE.MeshStandardMaterial({color:0xBDB8AC,roughness:1,metalness:0}));
+floor.rotation.x=-Math.PI/2; floor.position.y=-0.06; scene.add(floor);
+const ring=new THREE.Mesh(new THREE.RingGeometry(5.6,5.64,128),new THREE.MeshBasicMaterial({color:0xC9C4B6,side:THREE.DoubleSide}));
+ring.rotation.x=-Math.PI/2; ring.position.y=-0.05; scene.add(ring);
+
+// cross
+
+const armMat=new THREE.MeshStandardMaterial({color:0x3A4048,roughness:0.75,metalness:0.05});
+ARMS.forEach(a=>{
+  const g=new THREE.BoxGeometry(ARM_LEN,0.08,0.42);
+  const m=new THREE.Mesh(g,armMat);
+  const [dx,dz]=a.dir;
+  m.position.set(dx*ARM_LEN/2,0,dz*ARM_LEN/2);
+  m.rotation.y=dz!==0?Math.PI/2:0;
+  scene.add(m);
+  // arm tip label
+  const lab=textSprite(a.name.toUpperCase(),{size:34,color:"#"+a.color.toString(16).padStart(6,"0"),mono:false});
+  lab.position.set(dx*(ARM_LEN+0.9),0.25,dz*(ARM_LEN+0.9)); lab.scale.multiplyScalar(0.55); scene.add(lab);
+});
+const hub=new THREE.Mesh(new THREE.CylinderGeometry(0.34,0.34,0.1,32),armMat); scene.add(hub);
+
+// the bad: box + glow
+box=new THREE.Group(); box.position.copy(TOP); scene.add(box);
+boxCore=new THREE.Mesh(new THREE.BoxGeometry(1.1,1.1,1.1),new THREE.MeshStandardMaterial({color:0x22262B,roughness:0.4,metalness:0.2,emissive:0x8A4A08,emissiveIntensity:0.6,transparent:true,opacity:0.95}));
+box.add(boxCore);
+const boxEdges=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.14,1.14,1.14)),new THREE.LineBasicMaterial({color:0xD98A1E,transparent:true,opacity:0.95}));
+box.add(boxEdges);
+const glowTex=radialTexture();
+glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xF2A33A,transparent:true,opacity:0.55,depthWrite:false,blending:THREE.NormalBlending}));
+glow.scale.set(5,5,1); box.add(glow);
+const badLab=textSprite("the bad",{size:40,color:"#22262B",mono:true}); badLab.position.set(0,1.05,0); box.add(badLab);
+// embers inside the box
+emberN=90; emberPos=new Float32Array(emberN*3); emberSeed=[];
+for(let i=0;i<emberN;i++){emberSeed.push(Math.random()*Math.PI*2,Math.random(),Math.random())}
+embers=new THREE.Points(new THREE.BufferGeometry().setAttribute("position",new THREE.BufferAttribute(emberPos,3)),
+  new THREE.PointsMaterial({color:0xFFD27A,size:0.06,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.NormalBlending}));
+box.add(embers);
+
+// vines
+ARMS.forEach(a=>{
+  const [dx,dz]=a.dir;
+  SPOTS.forEach((r,i)=>{
+    const id=a.key+(i+1);
+    buildVine(id,a,new THREE.Vector3(dx*r,0.07,dz*r),(i+1)*1.7+ARMS.indexOf(a)*0.9);
+  });
+});
+HAS3D=true; return true;
+}
+
+const SEG=96;
+function vineCurve(base,score,seed){
+  const s=score/100;
+  const h=0.15+s*(H-0.15);
+  const pull=Math.pow(s,1.35);                      // convergence toward the axis
+  const tx=base.x*(1-pull*0.92), tz=base.z*(1-pull*0.92);
+  const ty=Math.min(h,TOP.y-0.75);
+  const p0=base.clone();
+  const p1=new THREE.Vector3(base.x*1.08,h*0.42,base.z*1.08);
+  const p2=new THREE.Vector3(tx*1.35+Math.sin(seed)*0.25,h*0.82,tz*1.35+Math.cos(seed)*0.25);
+  const p3=new THREE.Vector3(tx,ty,tz);
+  const bez=new THREE.CubicBezierCurve3(p0,p1,p2,p3);
+  // add organic wobble
+  const pts=[];
+  for(let i=0;i<=SEG;i++){
+    const t=i/SEG, p=bez.getPoint(t);
+    const w=0.09*Math.sin(t*9+seed)*t*(1-t)*4;
+    p.x+=w*Math.cos(seed*2+t*5); p.z+=w*Math.sin(seed*2+t*5);
+    pts.push(p);
+  }
+  return new THREE.CatmullRomCurve3(pts);
+}
+function buildVine(id,arm,base,seed){
+  const mat=new THREE.MeshStandardMaterial({color:arm.color,roughness:0.7,metalness:0.0,emissive:arm.color,emissiveIntensity:0.05});
+  const mesh=new THREE.Mesh(new THREE.TubeGeometry(vineCurve(base,1,seed),SEG,0.07,8,false),mat);
+  mesh.userData.id=id; scene.add(mesh);
+  const bud=new THREE.Mesh(new THREE.SphereGeometry(0.11,12,12),new THREE.MeshStandardMaterial({color:arm.color,emissive:arm.color,emissiveIntensity:0.6}));
+  scene.add(bud);
+  const base_=new THREE.Mesh(new THREE.CylinderGeometry(0.16,0.16,0.06,20),new THREE.MeshStandardMaterial({color:arm.color,roughness:0.6}));
+  base_.position.copy(base); base_.position.y=0.07; scene.add(base_);
+  const lab=textSprite(id,{size:26,color:"#5B6169",mono:true}); lab.position.set(base.x,0.4,base.z); lab.scale.multiplyScalar(0.55); scene.add(lab);
+  mesh.geometry.setDrawRange(0,0); bud.visible=false;
+  VINES[id]={mesh,mat,bud,base,arm,seed,score:0,grow:0,ready:false,curve:null};
+}
+function setVine(v,score){
+  v.score=score;
+  const curve=vineCurve(v.base,score,v.seed);
+  v.mesh.geometry.dispose();
+  v.mesh.geometry=new THREE.TubeGeometry(curve,SEG,0.045+0.07*(score/100),8,false);
+  v.curve=curve; v.ready=true; v.bud.visible=true;
+  const s=score/100;
+  v.mat.emissiveIntensity=0.05+0.25*s*s;
+}
+
+// ---------- helpers ----------
+function textSprite(text,{size=32,color="#fff",mono=false}){
+  const c=document.createElement("canvas"); const ctx=c.getContext("2d");
+  const font=(size*2)+"px "+(mono?'"IBM Plex Mono",monospace':'"IBM Plex Sans",sans-serif');
+  ctx.font=font; const w=Math.ceil(ctx.measureText(text).width)+40;
+  c.width=w; c.height=size*2+24;
+  ctx.font=font; ctx.fillStyle=color; ctx.textBaseline="middle"; ctx.fillText(text,20,c.height/2);
+  const tex=new THREE.CanvasTexture(c); tex.minFilter=THREE.LinearFilter;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false}));
+  sp.scale.set(c.width/120,c.height/120,1); return sp;
+}
+function radialTexture(){
+  const c=document.createElement("canvas"); c.width=c.height=256; const g=c.getContext("2d");
+  const r=g.createRadialGradient(128,128,0,128,128,128); r.addColorStop(0,"rgba(255,190,90,0.95)"); r.addColorStop(0.35,"rgba(255,190,90,0.30)"); r.addColorStop(1,"rgba(255,190,90,0)");
+  g.fillStyle=r; g.fillRect(0,0,256,256); return new THREE.CanvasTexture(c);
+}
+
+// ---------- data + ui ----------
+let DATA=null, CUR=0, calc=null;
+async function load(){
+  try{
+    const r=await fetch("data.json?v="+Date.now(),{cache:"no-store"});
+    if(!r.ok) throw new Error(r.status);
+    DATA=await r.json();
+    DATA.weeks.sort((a,b)=>a.date<b.date?-1:1);
+  }catch(e){ $("err").style.display="block"; return; }
+  const sl=$("slider"); sl.max=DATA.weeks.length-1; sl.value=DATA.weeks.length-1;
+  sl.oninput=()=>showWeek(Number(sl.value));
+  showWeek(DATA.weeks.length-1,true);
+}
+function showWeek(i,first){
+  CUR=i; const w=DATA.weeks[i]; calc=compute(w);
+  $("date").innerHTML=w.date+(w.backcast?"<em>backcast</em>":"")+(i===DATA.weeks.length-1&&!w.backcast?"<em>latest</em>":"");
+  if(HAS3D) Object.keys(VINES).forEach(id=>{
+    const v=VINES[id]; const prev=v.score;
+    setVine(v,w.roots[id]??0);
+    v.grow=first?0:Math.min(1,prev/Math.max(v.score,1));   // regrow from where it was
+  });
+  // composites
+  $("comps").innerHTML=ARMS.map(a=>'<div class="comp"><div class="lab"><i style="background:'+a.css+'"></i>'+a.name+'</div><div class="val">'+calc.comps[a.key]+'<span>/100</span></div></div>').join("")+
+    '<div class="comp"><div class="lab"><i style="background:var(--light)"></i>Index</div><div class="val">'+calc.idx+'<span>C×E×P÷K</span></div></div>';
+  // the box
+  const g=calc.maxGeo/100;
+  if(HAS3D){ glow.material.opacity=0.25+0.6*g; glow.scale.setScalar(3.5+5*g);
+  sun.intensity=0.9+1.6*g; boxCore.material.emissiveIntensity=0.3+1.2*g; }
+  // paths panel
+  $("paths").innerHTML=calc.paths.map(p=>'<div class="path"><div class="hd"><b>'+p.name+' <span style="color:var(--ink-2);font-size:12px;font-weight:400">'+p.sub+'</span></b><div class="m">weakest <strong>'+p.min+'</strong> · geo mean <strong>'+p.geo+'</strong></div></div>'+
+    '<div class="pre">'+p.pre.map(([k,v])=>'<span class="'+(v===p.min?"weak":"")+'">'+k+' '+v+'</span>').join("")+'</div><ul>'+p.list.map(x=>'<li>'+x+'</li>').join("")+'</ul></div>').join("");
+  if(info.id) showInfo(info.id);
+  // document: where each root stands this week
+  document.querySelectorAll('#doc .now').forEach(el=>{
+    const id=el.dataset.root, v=w.roots[id], prev=CUR>0?DATA.weeks[CUR-1].roots[id]:null;
+    const d=prev===null?'':(v-prev>=0?' (+'+(v-prev)+')':' ('+(v-prev)+')');
+    el.innerHTML='<div class="n">'+v+'<span>/100</span></div><div class="l">Where it stands · week of '+w.date+(w.backcast?' (backcast)':'')+d+'</div><div>'+((w.notes&&w.notes[id])||'No note this week.')+'</div>';
+  });
+}
+
+// picking
+
+const info={id:null};
+function showInfo(id){
+  const w=DATA.weeks[CUR], arm=ARMS.find(a=>a.key===id[0]), prev=CUR>0?DATA.weeks[CUR-1].roots[id]:null;
+  info.id=id;
+  const el=$("info"); el.classList.add("on");
+  el.querySelector(".id").textContent=id+" · "+arm.name;
+  el.querySelector(".nm").textContent=ROOTS[id];
+  el.querySelector(".sc").innerHTML=w.roots[id]+'<span>/100'+(prev!==null?" · prev "+prev+(w.roots[id]-prev>=0?" (+"+(w.roots[id]-prev)+")":" ("+(w.roots[id]-prev)+")"):"")+'</span>';
+  el.querySelector(".note").innerHTML=((w.notes&&w.notes[id])||"No note this week.")+' <a href="#r-'+id+'" style="color:inherit;white-space:nowrap">Read more ↓</a>';
+}
+$("infoX").onclick=()=>{info.id=null;$("info").classList.remove("on")};
+$("badX").onclick=()=>$("bad").classList.remove("on");
+$("bad").addEventListener("click",e=>{if(e.target===$("bad"))$("bad").classList.remove("on")});
+function start3D(){
+ray=new THREE.Raycaster();
+let downAt=null;
+canvas.addEventListener("pointerdown",e=>{downAt=[e.clientX,e.clientY]});
+canvas.addEventListener("pointerup",e=>{
+  if(!downAt||Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>8){downAt=null;return}
+  downAt=null;
+  const r=canvas.getBoundingClientRect();
+  const m=new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);
+  ray.setFromCamera(m,camera);
+  const hitBox=ray.intersectObject(boxCore,false);
+  if(hitBox.length){$("bad").classList.add("on");return}
+  const hits=ray.intersectObjects(Object.values(VINES).map(v=>v.mesh),false);
+  if(hits.length) showInfo(hits[0].object.userData.id);
+});
+
+// ---------- loop ----------
+function resize(){
+  const hero=document.getElementById("hero"); const w=hero.clientWidth,h=hero.clientHeight;
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+  if(w<640){camera.position.set(17,9,22);controls.target.set(0,5.8,0)}
+}
+window.addEventListener("resize",resize); resize();
+clock=new THREE.Clock();
+function frame(){
+  const dt=Math.min(clock.getDelta(),0.05), t=clock.elapsedTime;
+  Object.values(VINES).forEach(v=>{
+    if(!v.ready) return;
+    if(v.grow<1){
+      v.grow=Math.min(1,v.grow+dt*0.55);
+      const e=1-Math.pow(1-v.grow,2.2);
+      const idx=v.mesh.geometry.index.count;
+      v.mesh.geometry.setDrawRange(0,Math.floor(idx*e/6)*6);
+      const p=v.curve.getPoint(e); v.bud.position.copy(p);
+    }else{
+      v.mesh.geometry.setDrawRange(0,Infinity);
+      v.bud.position.copy(v.curve.getPoint(1));
+    }
+    v.bud.scale.setScalar(0.9+0.25*Math.sin(t*2.2+v.seed));
+  });
+  // embers
+  const pos=embers.geometry.attributes.position.array;
+  for(let i=0;i<emberN;i++){
+    const a=emberSeed[i*3]+t*0.35, r=0.15+emberSeed[i*3+1]*0.35, y=((emberSeed[i*3+2]+t*0.08)%1)*0.9-0.45;
+    pos[i*3]=Math.cos(a)*r; pos[i*3+1]=y; pos[i*3+2]=Math.sin(a)*r;
+  }
+  embers.geometry.attributes.position.needsUpdate=true;
+  box.rotation.y=t*0.12;
+  glow.material.opacity=(glow.material.opacity)*(0.985)+ (0.25+0.6*(calc?calc.maxGeo/100:0.3)+0.06*Math.sin(t*1.7))*0.015;
+  controls.update();
+  renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+frame();
+}
+
+// ---------- boot ----------
+load();                                   // data and numbers never wait on 3D
+window.__threeReady.then(()=>{
+  if(window.__threeFailed||typeof THREE==="undefined"){
+    showErr("The 3D library could not be downloaded (a VPN or content blocker may be stopping cdnjs, jsdelivr and unpkg). The numbers above are live; the vines need that library.");
+    return;
+  }
+  if(initScene()){ start3D(); if(DATA) showWeek(CUR,true); }
+});
+</script>
+</body>
+</html>
