@@ -44,6 +44,20 @@
     "6": "OpenAI posted that gpt-5.4-cyber shuts down Oct 1 on about 20 days' notice, against its stated six-month minimum; a gated specialty model, single source, no general policy change. No change; carried forward.",
     "7": "California SB 951 went to the Governor Sept 9 with a Sept 30 deadline; the enrolled text keeps the 60-day WARN period and requires notices to list job functions being automated. No company attributed cuts to AI this week. No change; carried forward."
    }
+  },
+  {
+   "date": "2026-09-28",
+   "barriers": [
+    50,
+    45,
+    62,
+    65,
+    45,
+    68,
+    55
+   ],
+   "observed": 6.5,
+   "notes": {}
   }
  ]
 }
