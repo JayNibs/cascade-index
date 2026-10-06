@@ -1,0 +1,38 @@
+{
+ "weeks": [
+  {
+   "date": "2025-10-06",
+   "backcast": true,
+   "roots": {"C1":55,"C2":55,"C3":70,"C4":35,"E1":40,"E2":25,"E3":55,"E4":40,"K1":45,"K2":45,"K3":35,"K4":70,"P1":65,"P2":60,"P3":55,"P4":55},
+   "notes": {
+    "C1": "Backcast. Opus 4.5 horizon ~5 h, doubling ~130 days.",
+    "C3": "Backcast. GPT-4-level cost fell ~200x in two years.",
+    "E3": "Backcast. Open-weight lag ~6–12 months.",
+    "K3": "Backcast. RSP v2 pause triggers still binding; ASL-3 active since May 2025.",
+    "P1": "Backcast. Four labs at the frontier, US/UK-dominated (AI Index 2025)."
+   }
+  },
+  {
+   "date": "2026-10-05",
+   "roots": {"C1":85,"C2":85,"C3":90,"C4":60,"E1":45,"E2":35,"E3":70,"E4":65,"K1":45,"K2":55,"K3":50,"K4":70,"P1":85,"P2":80,"P3":75,"P4":75},
+   "notes": {
+    "C1": "METR: Mythos Preview >16 h (above suite ceiling); doubling time 89 days since 2024.",
+    "C2": "HLE 3–9% → ~55–65%; FrontierMath T4 0% → 38%, all problems solved once by Sep 26; SWE-bench Verified saturated at 94–95%.",
+    "C3": "Epoch Sep 26: price for fixed capability falls ~47%/quarter (~13x/yr).",
+    "C4": "Claude Code sessions more autonomous than chat; attackers run 13 standing agents; DoD reports hundreds of thousands of agents across 1.3M personnel.",
+    "E1": "Census BTOS firm-weighted ~18% and flat; large firms 37%; employment-weighted 78%. Critical-infrastructure OT unmeasured.",
+    "E2": "McKinsey mid-2026: ~2 in 10 orgs scaling agents; ≤10% of any single function.",
+    "E3": "Epoch: open-weight lag ~4 months on ECI; UK AISI cyber lag 4–7 months (was 6–10).",
+    "E4": "Anthropic Sep 26: agent-driven intrusions against energy, healthcare, finance by every actor class. Microsoft: discovery-to-weaponization <24 h. Google: AI-generated 2FA-bypass zero-day in the wild.",
+    "K1": "Within-lab rates falling (Opus record-tampering 40→15→5%) but confounded by eval awareness; cross-lab 0–100%; Apollo ~0% baseline, 91% adversarial.",
+    "K2": "CoT monitoring deployed; >80% catch in artificial scenarios; defeated by basic jailbreaks; larger models less monitorable; METR says capability is outpacing detection.",
+    "K3": "GPT-4o withdrawn Feb 26; Mythos Preview withheld Apr 26. RSP v3 (Feb 26) made pause triggers nonbinding. Shutdown resistance o3 79%, others 0%.",
+    "K4": "EU GPAI fines enforceable Aug 26, high-risk rules deferred to 2027–28. No US statute; Dec 25 EO attacks state laws; CA SB 53 live. FLI best grade C+, existential safety D+.",
+    "P1": "Six labs within 79 Elo; US–China gap ~2.7%; Chinese lag 4–7 months.",
+    "P2": "Big-5 capex $443B (2025) → $600–770B (2026); first 2 GW site.",
+    "P3": "DoD IL6/IL7 deployment to 8 firms; CENTCOM used Claude for target identification; Genesis Mission $5B.",
+    "P4": "UK AISI: autonomous cyber horizon doubling every 4.7 months. Glasswing: thousands of zero-days, >99% unpatched at disclosure. Microsoft: near-term advantage to attackers."
+   }
+  }
+ ]
+}
