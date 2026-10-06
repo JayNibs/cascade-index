@@ -46,7 +46,7 @@
    }
   },
   {
-   "date": "2026-09-28",
+   "date": "2026-09-21",
    "barriers": [
     50,
     45,
@@ -57,7 +57,59 @@
     55
    ],
    "observed": 6.5,
-   "notes": {}
+   "notes": {
+    "1": "OpenAI published a misalignment-reporting framework and disclosed six incidents (Sept 16), all from training and evaluation of unreleased models with no production impact; no frontier model release or agentic benchmark result appeared in the window. No change; carried forward.",
+    "2": "METR time-horizon page still shows May 8 as its last update and no lab published a long-horizon measurement this week. No change; carried forward.",
+    "3": "Salesforce said at Dreamforce (Sept 15-17) that 30,000 customers are live on Agentforce and Potloc launched an MCP connector (Sept 15); both are vendor-side figures with no measure of the share of mid-to-large enterprises running standard connectors, and no adoption survey was published. No change; carried forward.",
+    "4": "Governor Newsom Sept 18 executive order directs a review of independent audits and an emergency shutoff for frontier models and does not address liability for agent actions; an IA Magazine piece (Sept 14) restated that standard general-liability policies may not cover AI-driven decisions. No new insurance product, ruling or regulator guidance. No change; carried forward.",
+    "5": "No public company attributed a headcount reduction to AI with a number this week and the Challenger series has not updated since the August report (Sept 2). No change; carried forward. Sector with most disclosures: technology.",
+    "6": "Anthropic pre-announced cut to Claude Code weekly limits (17 percent below the temporary boost, still 25 percent above the original baseline) took effect Sept 14 on Pro, Max, Team and seat-based Enterprise plans; it is a subscription usage cap, not an API price or deprecation change, and the OpenAI deprecation page shows no new notice after Sept 11. No change; carried forward.",
+    "7": "Pew Sept 16 short read and Sept 17 global report restate the June survey figure already in the baseline (71 percent of US adults expect fewer jobs, up from 64 percent in 2024); California SB 951 remains on the Governor desk with a Sept 30 deadline; no company attributed cuts to AI this week. No change; carried forward."
+   }
+  },
+  {
+   "date": "2026-09-28",
+   "barriers": [
+    48,
+    45,
+    60,
+    65,
+    45,
+    68,
+    55
+   ],
+   "observed": 6.5,
+   "notes": {
+    "1": "Anthropic released Claude Opus 5.5 with a system card and OpenAI released GPT-6 Sol and Luna (Sept 22); both report fewer errors and boundary violations than their predecessors, and METR's pre-deployment evaluation (Sept 22) rates Opus 5.5 an incremental step above Fable 5.1. Scored down 2 for that step; all benchmark figures are lab-reported and no independent reliability study appeared.",
+    "2": "METR published a pre-deployment evaluation of Claude Opus 5.5 (Sept 22) with no time-horizon measurement, and its time-horizons page still shows May 8 as its last update; Anthropic's 18-hour autonomous run is an anecdote, not a measured 50 percent horizon. No change; carried forward.",
+    "3": "KPMG's Q3 pulse survey (Sept 24) put significant employee adoption of AI agents at 34 percent of large enterprises, up from 25 percent in Q1, and Microsoft's release notes (Sept 23) recorded federated Copilot connectors reaching general availability, with Work IQ and a memory-holding Autopilot agent announced Sept 25. Scored down 2; no survey yet measures the connector-deployment share directly.",
+    "4": "FTC Chair Ferguson said at a Reuters event (Sept 25) that developers, not agents, are liable for what agents do, and City AM (Sept 24) reported cyber insurers limiting agentic-AI cover while the Lloyd's Market Association drafts a model AI definition. Neither is a product, ruling or written guidance. No change; carried forward.",
+    "5": "No public company attributed a headcount reduction to AI with a number this week; Paychex (Sept 23) described 2,000 internal agents as offsetting expense growth without cuts, and Expedia's 58-role cut (Sept 22) is small and its AI framing rests on one report. No change; carried forward. Sector with most disclosures: technology.",
+    "6": "OpenAI cut GPT-6 Sol and Luna prices 50 percent and called the rates permanent, Anthropic priced Opus 5.5 below Opus 5 and retired nothing with it (both Sept 22), and Anthropic signed a seven-year $11.6B infrastructure commitment with Akamai (Sept 24); against that, OpenAI disclosed (Sept 25) that research agents posted 53 user images publicly and Microsoft moved Copilot agents to metered credits. No deprecation notices; no change; carried forward.",
+    "7": "No large employer attributed cuts to AI this week; a CNN/SSRS poll (Sept 24) found 75 percent of US adults closer to fear and concern about AI and about 70 percent saying federal regulation is insufficient; California SB 951 remains unsigned with a Sept 30 deadline. No change; carried forward."
+   }
+  },
+  {
+   "date": "2026-10-05",
+   "barriers": [
+    48,
+    45,
+    60,
+    65,
+    45,
+    68,
+    57
+   ],
+   "observed": 9.2,
+   "notes": {
+    "1": "OpenAI released GPT-6.1 Sol (Sept 29) and Google released Gemini 4 Argon to a restricted group (Sept 30); Vals AI and Artificial Analysis place both near existing frontier models, with measured non-hallucination rates of 80 to 82 percent. Rescored and held. No change; carried forward.",
+    "2": "METR time-horizons page still shows May 8 as its last update, and neither the OpenAI GPT-6.1 Sol addendum (Sept 29) nor the Google Gemini 4 Argon post (Sept 30) gives a task-length measurement. No change; carried forward.",
+    "3": "OpenAI launched always-on agents with plugin access to more than 4,000 apps (Sept 29), with organisation-level use limited to pilots, and Google put federated database connectors for Gemini Enterprise into preview (Oct 2); Anthropic reported 16,000 Barclays staff using a Claude assistant (Oct 1). No survey measured the enterprise connector-deployment share. No change; carried forward.",
+    "4": "The California Attorney General served an investigative subpoena on OpenAI (Sept 30), Senators Hawley and Murphy announced an AI Agent Accountability Act without bill text (Oct 1), and Semafor and Axios reported an FTC investigation of AI developers (Sept 30). No insurance product, ruling or written guidance appeared. No change; carried forward.",
+    "5": "The Challenger September report (Oct 1) counted 3,961 AI-attributed cuts out of 43,281, with AI the leading reason year to date at 120,136; Accenture (Oct 1) reported headcount of about 814,000 and said hiring will run below this year, and the Workday 8-K (Sept 29) cut 2.5 percent of staff without attributing it to AI. No company put a job number on AI. No change; carried forward. Sector with most disclosures: technology.",
+    "6": "OpenAI gave six months notice for gpt-5.1, gpt-5.3-codex and gpt-5.4-nano (Oct 1) and Anthropic gave 61 days notice for Claude Sonnet 4.5 (Sept 30), both within their published minimums; both vendors had outages on Sept 29, and OpenAI halved the usage included in its $200 plan from Oct 30. No support-window policy changed. No change; carried forward.",
+    "7": "Governor Newsom signed California SB 951 and SB 947 (Sept 30); SB 951 requires mass-layoff notices to state when AI or automation is the cause and to list the job functions automated, and SB 947 bars discipline or firing based solely on an automated system. Scored up 2 for two passed state laws; neither takes effect until 2027 and no large employer attributed cuts to AI this week."
+   }
   }
  ]
 }
