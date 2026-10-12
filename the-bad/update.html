@@ -101,7 +101,7 @@
     <div><p class="lab">Pressure</p><p class="val" id="pP">—</p></div>
     <div><p class="lab">Index</p><p class="val" id="pI">—</p></div>
   </div>
-  <p class="foot">Composite = mean of its four roots. Index = Capability × Exposure × Pressure ÷ Control. Path scores are shown on the public page.</p>
+  <p class="foot">Composite = mean of its four roots. Index = Capability × Exposure × Pressure ÷ (100 − Control). Path scores are shown on the public page.</p>
 </div>
 
 <div class="actions">
@@ -154,7 +154,7 @@ function preview(){
   if(bad){["pC","pE","pK","pP","pI"].forEach(x=>$(x).textContent="—");return}
   const c={};ARMS.forEach(([k])=>{c[k]=Math.round(mean([1,2,3,4].map(i=>r[k+i])))});
   $("pC").textContent=c.C;$("pE").textContent=c.E;$("pK").textContent=c.K;$("pP").textContent=c.P;
-  $("pI").textContent=Math.round(c.C*c.E*c.P/Math.max(c.K,1)/100);
+  $("pI").textContent=Math.round(c.C*c.E*c.P/Math.max(100-c.K,1)/100);
 }
 document.addEventListener("input",preview);
 function addDays(iso,n){const d=new Date(iso+"T00:00:00");d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}

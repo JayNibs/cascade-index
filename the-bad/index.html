@@ -154,7 +154,7 @@
 </div>
 
 <h3>Composites and the index</h3>
-<p>Each arm's composite is the plain mean of its four roots. The headline index is Capability × Exposure × Pressure ÷ Control, scaled to 0–100. It is a ratio of force to resistance, not a probability. A rising index means the numerator is outrunning the denominator.</p>
+<p>Each arm's composite is the plain mean of its four roots. The headline index is Capability × Exposure × Pressure ÷ (100 − Control), divided by 100. Control is scored so that higher means weaker, so the formula divides by the control that remains. It is a ratio of force to remaining resistance, not a probability, and it has no fixed ceiling. A rising index means the force is growing, control is weakening, or both.</p>
 
 <h3>Disaster paths</h3>
 <p>Four paths lead to the box. Each is a set of preconditions that must all hold at the same time, and each precondition is the mean of one or two roots. Because they are conjunctions, a path is only as close as its weakest precondition. Two summary figures are shown for each: the <strong>weakest link</strong> (the lowest precondition, which is what would have to move for the path to converge) and the <strong>geometric mean</strong> (which penalises any path with a precondition far from met). Tap the box in the picture for the current figures.</p>
@@ -355,7 +355,7 @@
 </div>
 
 <h2>What the model said at launch</h2>
-<p>Scored on 5 October 2026 against public data: Capability 80, Exposure 54, Control 55, Pressure 79, index 62. A backcast to October 2025 using the same sources gives roughly 54 / 40 / 49 / 59, index 26. The index more than doubled in a year, driven almost entirely by capability and pressure. That is the trend-line argument, quantified, and it holds.</p>
+<p>Scored on 5 October 2026 against public data: Capability 80, Exposure 54, Control 55, Pressure 79, index 76. A backcast to October 2025 using the same sources gives roughly 54 / 40 / 49 / 59, index 25. The index roughly tripled in a year, driven mostly by capability, exposure and pressure, with weaker control adding to it. That is the trend-line argument, quantified, and it holds.</p>
 <p>What the arithmetic does not do is convert to a probability of a world-changing event in any fixed window. Misuse is the only path with no precondition below 50; loss of control has two preconditions (misalignment, kill switch) with contested evidence; systemic and arms-race paths are gated by institutions (circuit breakers, human vetoes) that have not yet been stressed by an AI-speed event. Those weakest links are what the weekly scoring watches most closely.</p>
 
 <h2>Caveats</h2>
@@ -428,7 +428,7 @@ function compute(week){
     const geo=Math.round(Math.exp(mean(vals.map(v=>Math.log(Math.max(v,1)/100))))*100);
     paths.push({name:p.name,sub:p.sub,list:p.list,pre,min,geo});
   });
-  const idx=Math.round(comps.C*comps.E*comps.P/Math.max(comps.K,1)/100);
+  const idx=Math.round(comps.C*comps.E*comps.P/Math.max(100-comps.K,1)/100);
   return {comps,paths,idx,maxGeo:Math.max(...paths.map(p=>p.geo))};
 }
 
@@ -600,7 +600,7 @@ function showWeek(i,first){
   });
   // composites
   $("comps").innerHTML=ARMS.map(a=>'<div class="comp"><div class="lab"><i style="background:'+a.css+'"></i>'+a.name+'</div><div class="val">'+calc.comps[a.key]+'<span>/100</span></div></div>').join("")+
-    '<div class="comp"><div class="lab"><i style="background:var(--light)"></i>Index</div><div class="val">'+calc.idx+'<span>C×E×P÷K</span></div></div>';
+    '<div class="comp"><div class="lab"><i style="background:var(--light)"></i>Index</div><div class="val">'+calc.idx+'<span>C×E×P÷(100−K)</span></div></div>';
   // the box
   const g=calc.maxGeo/100;
   if(HAS3D){ glow.material.opacity=0.25+0.6*g; glow.scale.setScalar(3.5+5*g);
