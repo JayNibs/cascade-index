@@ -110,6 +110,28 @@
     "6": "OpenAI gave six months notice for gpt-5.1, gpt-5.3-codex and gpt-5.4-nano (Oct 1) and Anthropic gave 61 days notice for Claude Sonnet 4.5 (Sept 30), both within their published minimums; both vendors had outages on Sept 29, and OpenAI halved the usage included in its $200 plan from Oct 30. No support-window policy changed. No change; carried forward.",
     "7": "Governor Newsom signed California SB 951 and SB 947 (Sept 30); SB 951 requires mass-layoff notices to state when AI or automation is the cause and to list the job functions automated, and SB 947 bars discipline or firing based solely on an automated system. Scored up 2 for two passed state laws; neither takes effect until 2027 and no large employer attributed cuts to AI this week."
    }
+  },
+  {
+   "date": "2026-10-12",
+   "barriers": [
+    48,
+    45,
+    60,
+    65,
+    45,
+    68,
+    57
+   ],
+   "observed": 9.2,
+   "notes": {
+    "1": "Anthropic released Claude Haiku 5.5 (Oct 7) and Mistral released a preview of Mistral Large 4 (Oct 6); Vals AI ranks Haiku 5.5 16th of 45 on its index, and neither model is placed above existing frontier models. Rescored and held. No change; carried forward.",
+    "2": "METR's time-horizons page shows no new measurement and carries a notice dated Sept 8 that it is no longer actively updated; METR's Oct 6 post covers tampering with evaluation logs and gives no task-length figure. No change; carried forward.",
+    "3": "Anthropic was reported to have put Claude for Google Workspace into public beta with Docs, Sheets and Slides connectors (Oct 6), and a SailPoint survey of 340 identity and security leaders (Oct 6) reported 79 percent running AI agents in production; the survey comes from a vendor and does not measure connector deployment. No change; carried forward.",
+    "4": "The Financial Times reported (Oct 6) that insurers and lawyers are examining directors-and-officers exposure for AI company executives and that Aon reviewed more than 300 AI-related legal cases; no such claim has been filed. No insurance product, ruling or written guidance appeared. No change; carried forward.",
+    "5": "HubSpot's 8-K (Oct 6) cut about 7 percent of staff, nearly 660 people, with charges of $65 to $75 million, and the chief executive's memo said the cuts were not driven by AI-related efficiencies; Amazon cut fewer than 1,000 Stores roles (Oct 7) without citing AI. No new Challenger report appeared and no company put a job number on AI. No change; carried forward. Sector with most disclosures: technology.",
+    "6": "Anthropic halved the Claude Sonnet 5.5 cache-read price (Oct 7), and Claude Haiku 5.5 returns errors for several request settings that Haiku 4.5 accepted; OpenAI's status page lists 13 incidents on Oct 6 and 7. No new deprecation notice appeared at OpenAI or Anthropic and no support-window policy changed. No change; carried forward.",
+    "7": "HubSpot's chief executive wrote that its 660 cuts were not driven by AI-related efficiencies (Oct 6), and the coverage read reported no backlash; New Jersey's S4075, which adds notice and severance duties for AI-related job changes, sits in the Senate Budget Committee and has not passed either chamber. No law passed and no large employer attributed cuts to AI this week. No change; carried forward."
+   }
   }
  ]
 }
