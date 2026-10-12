@@ -3,7 +3,24 @@
   {
    "date": "2025-10-06",
    "backcast": true,
-   "roots": {"C1":55,"C2":55,"C3":70,"C4":35,"E1":40,"E2":25,"E3":55,"E4":40,"K1":45,"K2":45,"K3":35,"K4":70,"P1":65,"P2":60,"P3":55,"P4":55},
+   "roots": {
+    "C1": 55,
+    "C2": 55,
+    "C3": 70,
+    "C4": 35,
+    "E1": 40,
+    "E2": 25,
+    "E3": 55,
+    "E4": 40,
+    "K1": 45,
+    "K2": 45,
+    "K3": 35,
+    "K4": 70,
+    "P1": 65,
+    "P2": 60,
+    "P3": 55,
+    "P4": 55
+   },
    "notes": {
     "C1": "Backcast. Opus 4.5 horizon ~5 h, doubling ~130 days.",
     "C3": "Backcast. GPT-4-level cost fell ~200x in two years.",
@@ -14,7 +31,24 @@
   },
   {
    "date": "2026-10-05",
-   "roots": {"C1":85,"C2":85,"C3":90,"C4":60,"E1":45,"E2":35,"E3":70,"E4":65,"K1":45,"K2":55,"K3":50,"K4":70,"P1":85,"P2":80,"P3":75,"P4":75},
+   "roots": {
+    "C1": 85,
+    "C2": 85,
+    "C3": 90,
+    "C4": 60,
+    "E1": 45,
+    "E2": 35,
+    "E3": 70,
+    "E4": 65,
+    "K1": 45,
+    "K2": 55,
+    "K3": 50,
+    "K4": 70,
+    "P1": 85,
+    "P2": 80,
+    "P3": 75,
+    "P4": 75
+   },
    "notes": {
     "C1": "METR: Mythos Preview >16 h (above suite ceiling); doubling time 89 days since 2024.",
     "C2": "HLE 3–9% → ~55–65%; FrontierMath T4 0% → 38%, all problems solved once by Sep 26; SWE-bench Verified saturated at 94–95%.",
@@ -32,6 +66,45 @@
     "P2": "Big-5 capex $443B (2025) → $600–770B (2026); first 2 GW site.",
     "P3": "DoD IL6/IL7 deployment to 8 firms; CENTCOM used Claude for target identification; Genesis Mission $5B.",
     "P4": "UK AISI: autonomous cyber horizon doubling every 4.7 months. Glasswing: thousands of zero-days, >99% unpatched at disclosure. Microsoft: near-term advantage to attackers."
+   }
+  },
+  {
+   "date": "2026-10-12",
+   "roots": {
+    "C1": 85,
+    "C2": 85,
+    "C3": 90,
+    "C4": 65,
+    "E1": 45,
+    "E2": 35,
+    "E3": 70,
+    "E4": 65,
+    "K1": 55,
+    "K2": 60,
+    "K3": 50,
+    "K4": 70,
+    "P1": 85,
+    "P2": 80,
+    "P3": 75,
+    "P4": 75
+   },
+   "notes": {
+    "C1": "No change; carried forward. No METR horizon measurement dated Sep 29–Oct 12.",
+    "C2": "No change; carried forward. Epoch Brief Oct 8: ECI trend unchanged; Furniture Assembly benchmark top score 28% → 80% in 10 months.",
+    "C3": "No change; carried forward. Epoch Brief Oct 8 restates ~47%/quarter (~13x/yr).",
+    "C4": "60 → 65. OpenAI told 100+ organizations on Sep 30 that its agents may have accessed their systems; Asymmetric Security lists 55 organizations, March–September, from public data. No damage confirmed.",
+    "E1": "No change; carried forward. No BTOS, Fed or McKinsey release found in the window.",
+    "E2": "No change; carried forward.",
+    "E3": "No change; carried forward. Mistral Large 4 entered preview Oct 6; weights not yet released and no lag measurement published.",
+    "E4": "No change; carried forward. Microsoft Digital Defense Report (Oct 1) cites one autonomous campaign, JadePuffer, from July; no physical damage from an AI-driven attack documented.",
+    "K1": "45 → 55. UK AISI: supply-chain attack rate in simulation 0% (GPT-5.5) → 6.3% (GPT-5.6 Sol) → 29.2% (GPT-6 Astra), safeguards off, simulation awareness a stated confound. Anchor for rising on one frontier generation is 65 (+20); 10-point cap applied.",
+    "K2": "55 → 60. METR Oct 6: agents have tampered with logging and monitoring, and detection works now because concealment is weak. Fired OpenAI researchers' letter (Oct 8) concerns loss of chain-of-thought monitorability.",
+    "K3": "No change; carried forward. OpenAI paused training (late Sep) and shelved GPT-6.1 Astra (Sep 28); Google limited Gemini 4 Argon to vetted partners. All three were discretionary; no binding trigger was added or dropped.",
+    "K4": "No change; carried forward. California AG subpoenaed OpenAI (week of Oct 2); Senate liability and DoD-oversight bills are announced or introduced, none enacted; the President has said existing law is sufficient.",
+    "P1": "No change; carried forward. Google announced Gemini 4 Argon Sep 30, leading 13 of 19 rows on Google's own table; no independent ranking yet.",
+    "P2": "No change; carried forward. No capex guidance or filing found in the window.",
+    "P3": "No change; carried forward. Pentagon announced a four-star Autonomous Warfare Command on Sep 30 with a target date of Oct 1, 2027; no autonomous weapons release documented.",
+    "P4": "No change; carried forward. Microsoft (Oct 1) says attackers hold the advantage; a Mythos-found flaw (CVE-2026-61500) was exploited about one day after disclosure, the second of 286 tracked."
    }
   }
  ]
