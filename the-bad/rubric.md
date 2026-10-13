@@ -5,7 +5,8 @@ Binding rules for the weekly scoring of the AI catastrophic-risk trend model. Si
 ## Arms and roots
 
 **Capability (the force)**
-- C1 Frontier task horizon — METR 50%-success time horizon and its doubling time. Anchors: 2 h = 40, 8 h = 60, 16 h = 75, 1 week = 90, 1 month+ = 100.
+- C1 Frontier task horizon — the task length (human-expert time) a frontier model completes at 50% reliability, and its doubling time. Anchors: 2 h = 40, 8 h = 60, 16 h = 75, 1 week = 90, 1 month+ = 100.
+  Sources (METR's time-horizons page stopped updating Sept 2026; its suite tops out at 16 h): (1) Epoch Capabilities Index (epoch.ai/eci), the primary cadence source; anchor Claude Mythos Preview ≈ 16 h at its ECI score and count every +5 ECI points at the frontier as one doubling of horizon. (2) METR pre-deployment evaluations on metr.org/blog whenever one appears; a measured 50% horizon overrides the ECI estimate for that model, with its confidence interval noted. (3) Epoch/METR MirrorCode (epoch.ai/mirrorcode): any target solved at 100% counts as evidence for the 1-week anchor, since its targets are 2–17 human-weeks of work. (4) UK AISI cyber task horizon as a growth-rate cross-check only; its 80% horizon runs roughly 4–5× below a 50% horizon. Lab system cards may be cited but do not move the score alone.
 - C2 Benchmark trajectory — speed at which new frontier benchmarks (HLE, FrontierMath, ARC-AGI, successors) go from near-zero to saturation. Anchors: >36 months = 30, 24 months = 55, 12–20 months = 85, <9 months = 100.
 - C3 Cost per unit capability — annual price decline for fixed capability (Epoch). Anchors: 2x/yr = 40, 5x/yr = 65, 10x+/yr = 90.
 - C4 Autonomy in deployment — share and depth of agentic (multi-step, tool-using, low-oversight) use in real work and operations. Anchors: assistants only = 20, agents common in dev/IT = 50, standing agents on schedules in ops and attacks = 65, agents acting unsupervised in consequential systems = 90.
