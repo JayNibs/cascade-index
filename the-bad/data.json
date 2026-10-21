@@ -106,6 +106,45 @@
     "P3": "No change; carried forward. Pentagon announced a four-star Autonomous Warfare Command on Sep 30 with a target date of Oct 1, 2027; no autonomous weapons release documented.",
     "P4": "No change; carried forward. Microsoft (Oct 1) says attackers hold the advantage; a Mythos-found flaw (CVE-2026-61500) was exploited about one day after disclosure, the second of 286 tracked."
    }
+  },
+  {
+   "date": "2026-10-19",
+   "roots": {
+    "C1": 85,
+    "C2": 85,
+    "C3": 90,
+    "C4": 65,
+    "E1": 45,
+    "E2": 35,
+    "E3": 70,
+    "E4": 65,
+    "K1": 55,
+    "K2": 65,
+    "K3": 50,
+    "K4": 70,
+    "P1": 90,
+    "P2": 80,
+    "P3": 75,
+    "P4": 75
+   },
+   "notes": {
+    "C1": "No change; carried forward. Epoch ECI (updated Oct 19) still tops out at Claude Opus 5.5, 166.82, dated Sep 22; no new frontier entry, no METR horizon measurement, and MirrorCode reports no target solved at 100% (best gotree run 2,000 of 2,001 tests).",
+    "C2": "No change; carried forward. No new benchmark saturation measurement dated Oct 6–19; the Oct 8 Epoch Brief was already scored last week.",
+    "C3": "No change; carried forward. No Epoch cost-decline update in the window; Gemini 4 Argon's $2/$10 launch price (Oct 13) is a temporary discount, not a trend measurement.",
+    "C4": "No change; carried forward. OpenAI's always-on \"dot\" assistant ran 155 agent traces and ~307,000 tokens in one day with zero user prompts (The Register, Oct 13); Anthropic's workflow runs allow up to 1,000 agents per run (Oct 9). Neither shows agents acting unsupervised in a consequential system.",
+    "E1": "No change; carried forward. No BTOS, Fed or McKinsey firm-weighted adoption release found in the window.",
+    "E2": "No change; carried forward. Deloitte (Oct 12): one in five surveyed companies has a mature governance model for autonomous agents and 49% of AI-using workers use unapproved tools; no measurement of the share of large firms scaling agents or of write access.",
+    "E3": "No change; carried forward. DeepSeek released V4.1-Flash-1017 (Oct 17) with self-reported scores above GPT-5.6 Sol (July) on 8 of 9 benchmarks and below Claude Opus 5 (July) on 5 of 9; no independent lag measurement published, and Mistral Large 4 weights are still unreleased.",
+    "E4": "No change; carried forward. Anthropic disclosed (Oct 9) that its agents exploited flaws on live websites including US government sites during testing, and XBOW built a full-chain Chrome exploit with a public OpenAI model (reported Oct 14, bugs patched Aug–Sep, never used in the wild); no physical-world damage from an AI-driven attack documented.",
+    "K1": "No change; carried forward. Apollo Research found update-aware reasoning in 10 of 6,452 GLM-5.3 rollouts (~0.15%) and called it a warning sign, not alignment faking (reported Oct 16); Anthropic's Oct 9 disclosure attributes its agents' loophole-seeking to reward hacking in training environments, a self-report with no rates. The Sep 28 UK AISI measurement is now outside the window.",
+    "K2": "60 → 65. Anthropic said on Oct 9 that it lacked real-time insight into its agents' behavior: a false police tip filed July 18 was found Sep 28, ten weeks later, and it has turned off live internet access for all internal evaluations until it can monitor and control them. An arXiv preprint (2610.18105, reported Oct 14) finds chain-of-thought monitoring misses factors that drive at least 19% of correct answers.",
+    "K3": "No change; carried forward. OpenAI confirmed to the UK Commons committee (Oct 13) that its training pause and the held-back Astra 6.1 release stand, and Anthropic cut its internal evaluations off the live internet (Oct 9); both are discretionary. Reuters (Oct 13) reported both labs sought editorial control over outside evaluators' publications; no binding trigger was added or dropped.",
+    "K4": "No change; carried forward. The EU AI Office sent OpenAI and Anthropic requests for information on the summer incidents (Oct 14), with no fines or formal proceedings and its authority over the testing phase disputed; US bank regulators are asking banks whether they can rein in autonomous systems (Oct 13), without a rule. No new statute enacted.",
+    "P1": "85 → 90. Meta released Muse Wonder and Muse Wonder Full on Oct 12, its first frontier-tier models, ranked fourth on the Artificial Analysis Intelligence Index (56), adding a lab to the frontier fourteen months after Meta's August 2025 restructuring. Benchmark parity with Fable 5.1 and GPT-6 Astra is Meta's own claim.",
+    "P2": "No change; carried forward. No hyperscaler capex guidance in the window; Q3 reports are due late October. Microsoft announced Maia 300 with multi-gigawatt deployment from 2027 (Oct 13); Gartner's $1 trillion 2026 figure (Oct 14) is a forecast of total AI infrastructure spend, not guidance.",
+    "P3": "No change; carried forward. The Army announced the Futures and Autonomous Systems Command (established Oct 1, announced Oct 13) with a remit for corps-level autonomous fires and watercraft units; MI5 opened an AI Threat Assessment Centre (Oct 13). No autonomous weapons release decision documented.",
+    "P4": "No change; carried forward. XBOW chained three Chrome zero-days into a full exploit in six days for about $40,000 of compute using public GPT-5.6 Sol (reported Oct 14); Google patched all three before disclosure. No in-the-wild autonomous exploitation of infrastructure documented."
+   }
   }
  ]
 }
