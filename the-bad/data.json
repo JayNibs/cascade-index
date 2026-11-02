@@ -184,6 +184,45 @@
     "P3": "No change; carried forward. GAO's report (published Oct 14, covered Oct 21–23) finds CDAO's responsible-AI division 3 of 10 positions filled and 29 of 64 pathway efforts incomplete, with the Pentagon pushing an \"AI first\" force; no new targeting use or autonomous weapons release decision documented in the window; no BIS export-control action found.",
     "P4": "75 → 80. PHP2Shell (CVE-2026-109618/109619): reported to PHP Aug 11 and patched Oct 21 (71 days), with the CVE details leaking Oct 20, a public proof-of-concept about 12 hours before the patch, exploitation attempts against Amazon honeypots from Oct 17 (four days before disclosure), confirmed remote code execution in the wild by Oct 26, and 59–67% of version-identifiable hosts on branches with no official fix at disclosure (CybelAngel, Bitsight); OpenAI and Wiz say frontier models found the bugs and OpenAI expects such findings to \"increase sharply.\" CrowdStrike (Oct 21) separately documents four actors running agentic AI across the kill chain, one agent harvesting domain-controller credentials in about 20 minutes without further human guidance. The 90 anchor (in-the-wild autonomous exploitation of infrastructure) is not met: no source documents AI-driven exploitation of PHP2Shell, and the Unit 42 report of agentic post-exploitation at a European government entity is single-source and secondary. Cap arithmetic: 75 + 5 = 80, under the 10-point cap; the event is named and does not justify an override to 90."
    }
+  },
+  {
+   "date": "2026-11-02",
+   "roots": {
+    "C1": 85,
+    "C2": 85,
+    "C3": 90,
+    "C4": 65,
+    "E1": 45,
+    "E2": 35,
+    "E3": 70,
+    "E4": 65,
+    "K1": 55,
+    "K2": 70,
+    "K3": 50,
+    "K4": 70,
+    "P1": 90,
+    "P2": 80,
+    "P3": 75,
+    "P4": 80
+   },
+   "notes": {
+    "C1": "No change; carried forward. No METR horizon measurement dated in the window. Epoch ECI search found no new frontier entry after Claude Opus 5.5 (Sep 22). The Epoch scores file was not re-read this run, so this rests on search results only.",
+    "C2": "No change; carried forward. No benchmark saturation measurement dated Oct 19 to Nov 2 was found.",
+    "C3": "No change; carried forward. No Epoch fixed-capability cost measurement dated in the window was found.",
+    "C4": "No change; carried forward. No new documentation dated in the window of agents acting unsupervised in consequential systems. Claude Duet (Oct 21) and OpenAI's Oct 20 monitor-disabling report were scored last week at the 65 anchor and are not re-scored.",
+    "E1": "No change; carried forward. The Census BTOS release of Oct 22 could not be read, and no new firm-weighted adoption figure dated in the window was found.",
+    "E2": "No change; carried forward. No survey of firms scaling agents dated in the window was found.",
+    "E3": "No change; carried forward. Mistral Large 4 open weights were published on Hugging Face on Oct 29 (about 1 trillion parameters; 79 percent on CyberGym-E2E, level with MiMo-V2.6-Pro and above DeepSeek V4.1 Flash at 76 percent). Its Artificial Analysis Intelligence Index score was 38 against 58 for Claude Opus 5.5 (figures dated Oct 6), a 20-point gap. That is not frontier-class, so the 90 anchor is not met. General open-weight lag was last measured at 4 months (May); held at 70.",
+    "E4": "No change; carried forward. One-time PHP input applied: CVE-2026-109618 and CVE-2026-109619 (disclosed Oct 21, CVSS 9.2, unauthenticated remote code execution). In the window: exploitation confirmed by one honeypot observer (BleepingComputer, Oct 26, relayed from prior-week sourcing); Moody's describes attempts from several threat actors with no named victim, no operational damage and no CISA KEV listing mentioned. AI appears only as the discovery tool (OpenAI's GPT-5.6 Sol, and Wiz). No source attributes AI-driven exploitation to the attackers. Neither the 85 anchor (confirmed physical-world damage) nor the 65 anchor (autonomous operations by every actor class against energy, health or finance) is documented for this event. Cap arithmetic: 65 plus 0 equals 65. This root would move if a source documented automated or AI-run exploitation of PHP2Shell at scale.",
+    "K1": "No change; carried forward. No new alignment-rate measurement dated in the window was found. UK AISI (Oct 23) and OpenAI (Oct 20) were scored last week and are not re-scored.",
+    "K2": "No change; carried forward. METR and Redwood Research (Oct 22) moved this root from 65 to 70 last week and are not re-scored. No new monitoring-coverage measurement dated in the window was found.",
+    "K3": "No change; carried forward. No binding pause trigger was added, dropped or changed in the window. OpenAI's Oct 23 training-policy change was scored last week.",
+    "K4": "No change; carried forward. No binding federal statute, enforcement action or fine dated in the window was found. The AEGIS draft shows no new movement in the window.",
+    "P1": "No change; carried forward. Kimi K3.1 Pro (Oct 23) and Mistral Large 4 (Oct 29) both sit below the top closed model. Forkast (Oct 24) listed tracker estimates of OpenAI and Anthropic frontier releases around Oct 28 to 29. No vendor announcement was found in search, so no release is scored. The 90 band is unchanged.",
+    "P2": "No change; carried forward. Alphabet (Oct 28) raised 2026 capex guidance to 195 to 205 billion dollars and signaled 2027 above 300 billion. Amazon (Oct 29) put 2026 capex at about 220 billion and said 2027 will be meaningfully higher. Microsoft (Oct 28) reported 39.4 billion of capex in the quarter and about 175 billion of guidance; the period (fiscal 2027 or calendar 2026) is unresolved. Meta (Oct 21) is 135 to 145 billion. On these figures the 2026 big-four total is about 725 to 745 billion, the same range as last week and inside the 600 billion band. No source sums 2027 to 1 trillion or more, so the 95 anchor is not met. This is the root most likely to move next.",
+    "P3": "No change; carried forward. No new targeting use or autonomous weapons release decision dated in the window was found. A revised Pentagon targeting doctrine reported by Bloomberg is dated June 2026 and falls outside the window.",
+    "P4": "No change; carried forward. One-time PHP input applied; see E4. Last week's move from 75 to 80 stands. In the window, exploitation is confirmed by one observer and attributed to several actors, not to automated AI tooling. The 90 anchor (in-the-wild autonomous exploitation of infrastructure) is not documented. Cap arithmetic: 80 plus 0 equals 80."
+   }
   }
  ]
 }
