@@ -223,6 +223,45 @@
     "P3": "No change; carried forward. No new targeting use or autonomous weapons release decision dated in the window was found. A revised Pentagon targeting doctrine reported by Bloomberg is dated June 2026 and falls outside the window.",
     "P4": "No change; carried forward. One-time PHP input applied; see E4. Last week's move from 75 to 80 stands. In the window, exploitation is confirmed by one observer and attributed to several actors, not to automated AI tooling. The 90 anchor (in-the-wild autonomous exploitation of infrastructure) is not documented. Cap arithmetic: 80 plus 0 equals 80."
    }
+  },
+  {
+   "date": "2026-11-09",
+   "roots": {
+    "C1": 90,
+    "C2": 85,
+    "C3": 90,
+    "C4": 65,
+    "E1": 45,
+    "E2": 35,
+    "E3": 70,
+    "E4": 65,
+    "K1": 55,
+    "K2": 70,
+    "K3": 50,
+    "K4": 70,
+    "P1": 95,
+    "P2": 80,
+    "P3": 75,
+    "P4": 80
+   },
+   "notes": {
+    "C1": "Moved 85 to 90 (+5). Anthropic Fable 5.2 (Nov 9) set a new ECI record at 174, five points above GPT-6 Astra at 169. Per the rubric, +5 ECI at the frontier equals one doubling of implied task horizon. One doubling from the prior 85 (between the 16-hour and one-week anchors) reaches the one-week anchor at 90. METR (Nov 5) found AI R&D acceleration at 1.9x, corroborating capability acceleration.",
+    "C2": "No change; carried forward. No benchmark saturation measurement dated in the window was found.",
+    "C3": "No change; carried forward. No new Epoch fixed-capability cost measurement dated in the window was found.",
+    "C4": "No change; carried forward. No new documentation dated in the window of agents acting unsupervised in consequential systems.",
+    "E1": "No change; carried forward. No new firm-weighted adoption figure dated in the window was found.",
+    "E2": "No change; carried forward. No survey of firms scaling agents dated in the window was found.",
+    "E3": "No change; carried forward. Kimi K3.1 Pro open weights released Nov 5; no benchmark comparison to the closed frontier was found.",
+    "E4": "No change; carried forward. No new AI-enabled incident dated in the window was found.",
+    "K1": "No change; carried forward. No new alignment-rate measurement dated in the window was found.",
+    "K2": "No change; carried forward. No new monitoring-coverage measurement dated in the window was found.",
+    "K3": "No change; carried forward. No binding pause trigger was added, dropped or changed in the window.",
+    "K4": "No change; carried forward. 2026 midterms (Nov 4) returned a divided Congress; this changes the legislative trajectory but not the binding law currently in force.",
+    "P1": "Moved 90 to 95 (+5). Anthropic Fable 5.2 (Nov 9) surpassed GPT-6 Astra (Sep 3) in 67 days. The 95 anchor is 8+ labs or <3 months; 67 days meets the second condition.",
+    "P2": "No change; carried forward. No new aggregate capex figure in the window changes the 2026 total already scored. The 95 anchor (1 trillion dollars or more) is not met.",
+    "P3": "No change; carried forward. No new targeting use or autonomous weapons release decision dated in the window was found.",
+    "P4": "No change; carried forward. No new autonomous exploitation of infrastructure dated in the window was found."
+   }
   }
  ]
 }
