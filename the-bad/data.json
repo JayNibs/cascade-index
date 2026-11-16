@@ -262,6 +262,45 @@
     "P3": "No change; carried forward. No new targeting use or autonomous weapons release decision dated in the window was found.",
     "P4": "No change; carried forward. No new autonomous exploitation of infrastructure dated in the window was found."
    }
+  },
+  {
+   "date": "2026-11-16",
+   "roots": {
+    "C1": 90,
+    "C2": 85,
+    "C3": 90,
+    "C4": 65,
+    "E1": 45,
+    "E2": 35,
+    "E3": 70,
+    "E4": 65,
+    "K1": 55,
+    "K2": 70,
+    "K3": 50,
+    "K4": 70,
+    "P1": 95,
+    "P2": 80,
+    "P3": 75,
+    "P4": 85
+   },
+   "notes": {
+    "C1": "No change; carried forward. Epoch's Nov 11 brief confirms Claude Fable 5.2 at ECI 174, the figure already scored last week; no new frontier ECI entry or METR horizon measurement in the window.",
+    "C2": "No change; carried forward. No benchmark saturation measurement dated in the window was found.",
+    "C3": "No change; carried forward. No new Epoch fixed-capability cost measurement dated in the window was found.",
+    "C4": "No change; carried forward. Google (Nov 16) reports agent frameworks automating steps of live intrusions, which matches the existing 65 anchor (standing agents in operations and attacks).",
+    "E1": "No change; carried forward. No new firm-weighted adoption figure dated in the window was found.",
+    "E2": "No change; carried forward. No survey of firms scaling agents dated in the window was found.",
+    "E3": "No change; carried forward. Epoch (Nov 11) reports open-weight GLM 5.3 built working Firefox exploits in a sandbox, but gives no open-versus-closed lag figure.",
+    "E4": "No change; carried forward. Google (Nov 16) reports the first fully autonomous exploit pipeline used in the wild, against websites and in an aerospace intrusion; no energy, health or finance operations or physical damage are reported, so the 85 anchor is not met.",
+    "K1": "No change; carried forward. Apollo and OpenAI announced an embedded subversion assessment (Nov 16) but published no measured rates.",
+    "K2": "No change; carried forward. No new monitoring-coverage measurement dated in the window was found.",
+    "K3": "No change; carried forward. Apollo's embedded pilot at OpenAI (Nov 16) adds outside access, not a binding pause trigger.",
+    "K4": "No change; carried forward. No new binding frontier-specific law took effect or was preempted in the window.",
+    "P1": "No change; carried forward. No new frontier release in the window changed the lab count or the time-to-match.",
+    "P2": "No change; carried forward. Epoch (Nov 11) reports new AI compute doubling every 9 months; no new aggregate capex figure changes the 2026 total already scored.",
+    "P3": "No change; carried forward. No new targeting use or autonomous weapons release decision dated in the window was found.",
+    "P4": "Moved 80 to 85 (+5). Google (Nov 16) reports attackers using an autonomous framework to turn security patches into working exploits with no human in the loop, in the wild, against websites; Epoch (Nov 11) reports an open-weight model built Firefox exploits for about $1,000 each. The 90 anchor needs autonomous exploitation of infrastructure, which is not reported."
+   }
   }
  ]
 }
